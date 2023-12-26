@@ -17,15 +17,21 @@ public class SuoController {
     @Autowired
     SuoFundService fundService;
 
-    @PostMapping("/create/fundCheck")
+    @PostMapping("/fundCheck/create")
     public ApiResult<?> createFundCheck(@RequestParam("month") String month) {
         fundService.createFundCheck(month);
         return ApiResult.success(month);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/fundCheck/list")
     public ApiResult<?> fundCheckList() {
-        return ApiResult.success();
+        return ApiResult.success(fundService.fundCheckList());
+    }
+
+    @GetMapping("/fundCheck/detail/list")
+    public ApiResult<?> fundCheckDetailList(@RequestParam("checkId") String checkId,
+                                            @RequestParam("type") String type) {
+        return ApiResult.success(fundService.fundCheckDetailList(checkId, type));
     }
 
 }

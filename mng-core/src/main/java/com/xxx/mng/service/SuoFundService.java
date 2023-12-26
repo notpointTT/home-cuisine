@@ -1,5 +1,6 @@
 package com.xxx.mng.service;
 
+import com.xxx.mng.entities.SuoPzFundCheck;
 import com.xxx.mng.entities.SuoPzFundCheckRecordEntity;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface SuoFundService {
     void createFundCheck(String month);
 
     List<SuoPzFundCheckRecordEntity> fundCheckList();
+
+    List<? extends SuoPzFundCheck> fundCheckDetailList(String checkId, String type);
 
 }

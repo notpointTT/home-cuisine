@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xxx.mng.mapper.SuoFundMapper">
-    <select id="selectAll" resultType="hashmap">
-        select * from suo_mz_fund_detail_tl
+
+    <insert id="createFundCheck">
+        insert into suo_mz_fund_check_record (id, month, start_time)
+        values (#{id}, #{month}, #{startTime})
+    </insert>
+
+    <select id="selectFundCheckList" resultType="com.xxx.mng.entities.SuoPzFundCheckRecordEntity">
+        select * from suo_mz_fund_check_record
+    </select>
+
+    <select id="fundCheckDetailList" resultType="hashmap">
+        select * from ${table} where check_id = #{checkId}
     </select>
 </mapper>

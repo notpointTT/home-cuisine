@@ -11,5 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 public class XxxMngStarter {
     public static void main(String[] args) {
         SpringApplication.run(XxxMngStarter.class, args);
+        System.out.println("run success");
     }
 }
