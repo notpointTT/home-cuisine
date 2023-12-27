@@ -1,3 +1,6 @@
 eureka:
   instance:
     ip-address: tx
+
+logging:
+  config: classpath:config/logback-spring-pro.xml
