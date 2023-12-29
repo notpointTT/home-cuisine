@@ -19,6 +19,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +36,8 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 /**
@@ -63,6 +66,9 @@ public class SuoFundServiceImpl implements SuoFundService {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
 
     @Override
     public void createFundCheck(String month) {
@@ -157,7 +163,7 @@ public class SuoFundServiceImpl implements SuoFundService {
         @Override
         public void doAfterAllAnalysed(AnalysisContext context) {
             if (!dataList.isEmpty()) {
-                fundMapper.executeSql(generateSql(dataList));
+                executeSql(dataList);
                 dataList.clear();
             }
         }
@@ -190,6 +196,7 @@ public class SuoFundServiceImpl implements SuoFundService {
                 for (int i = 0; i < prepareSqlStringParams.params.size(); i++) {
                     preparedStatement.setString(i+1, prepareSqlStringParams.params.get(i));
                 }
+                preparedStatement.execute();
 
             }catch (Exception e) {
                 throw new XxxException(e);
@@ -281,7 +288,7 @@ public class SuoFundServiceImpl implements SuoFundService {
         String getObjValue(T data, Method method) throws Exception {
             Object obj = method.invoke(data);
             if (!(obj instanceof Date)) {
-                return obj == null ? "''" : ("'" + obj.toString() + "'");
+                return obj == null ? "" : obj.toString();
             }
             return simpleDateFormat.format(obj);
         }
@@ -317,9 +324,15 @@ public class SuoFundServiceImpl implements SuoFundService {
     }
 
     class FundCheckExcelListener extends AnalysisEventListener<SuoFundCheckExcel> {
+
+        private static final int SEMAPHORE_SIZE = 10;
+        private static final int BATCH_SIZE = 200;
         private List<SuoFundCheckExcel> dataList = new ArrayList<>();
+        private List<SuoFundCheckExcel> batchList = new ArrayList<>(BATCH_SIZE);
 
         private List<SimpleFundInfo> simpleFundInfoList;
+
+        private Semaphore semaphore = new Semaphore(SEMAPHORE_SIZE, true);
 
         public FundCheckExcelListener(List<SimpleFundInfo> simpleFundInfoList) {
             this.simpleFundInfoList = simpleFundInfoList;
@@ -327,29 +340,81 @@ public class SuoFundServiceImpl implements SuoFundService {
 
         @Override
         public void invoke(SuoFundCheckExcel data, AnalysisContext context) {
-            for (SimpleFundInfo f: simpleFundInfoList) {
-                String 订单号 = f.get订单号();
-                String 业务类型 = f.get业务类型();
-                String bt = data.get业务类型();
-                List<String> l = new ArrayList<>(2);
-                if (!StringUtils.isEmpty(bt)) {
-                    l.add(bt);
-                }
-                if (订单号.contains(data.get订单号())) {
-                    l.add(业务类型);
-
-                } else if (业务类型.equals("会员") && 订单号.equals(data.get交易时间() + ">>>" + data.get收款())) {
-                    l.add(业务类型);
-                }
-
-                data.set业务类型(String.join(",", l));
-
+            batchList.add(data);
+            if (batchList.size() >= BATCH_SIZE) {
+                toSetType(batchList);
+                batchList = new ArrayList<>(BATCH_SIZE);
             }
+
             dataList.add(data);
         }
 
+        void toSetType (List<SuoFundCheckExcel> batchList) {
+            taskExecutor.execute(() -> {
+                try {
+                    semaphore.acquire();
+                    batchList.forEach(data -> {
+                        String bt = data.get业务类型();
+                        List<String> l = new ArrayList<>();
+                        if (!StringUtils.isEmpty(bt)) {
+                            l.add(bt);
+                        }
+                        String 商户号 = data.get商户号();
+                        if ("视频号".equals(商户号)) {
+                            l.add("视频");
+                        }
+                        String data订单号 = data.get订单号();
+                        if (data订单号.startsWith("video")) {
+                            l.add("视频");
+                        }
+                        String orderCheckAndCode = "";
+                        for (SimpleFundInfo f: simpleFundInfoList) {
+                            String 订单号 = f.get订单号();
+                            String 业务类型 = f.get业务类型();
+
+                            if (业务类型.equals("会员") && 订单号.equals(data.get交易时间() + ">>>" + data.get收款())) {
+                                l.add(业务类型);
+                            }
+
+                            if (业务类型.equals("视频") && 订单号.equals(data.get商品名称() + ">>>" + data.get收款())) {
+                                l.add(业务类型);
+                            }
+
+                            if (订单号.contains(data订单号)) {
+                                l.add(业务类型);
+                                orderCheckAndCode = 业务类型;
+                            }
+
+                        }
+                        if (!StringUtils.isEmpty(orderCheckAndCode)) {
+                            l.clear();
+                            l.add(orderCheckAndCode);
+                        }
+
+                        data.set业务类型(l.stream().distinct().collect(Collectors.joining(",")));
+
+                    });
+                }catch (Exception e) {
+                    LOGGER.error("", e);
+                }finally {
+                    semaphore.release();
+                }
+            });
+        }
+
+
         @Override
         public void doAfterAllAnalysed(AnalysisContext context) {
+            if (!batchList.isEmpty()) {
+                toSetType(batchList);
+            }
+            try {
+                semaphore.acquire(SEMAPHORE_SIZE);
+            }catch (Exception e) {
+                LOGGER.error("", e);
+            }finally {
+                semaphore.release(SEMAPHORE_SIZE);
+            }
 
         }
     }
