@@ -19,6 +19,13 @@ spring:
     multipart:
       max-file-size: 20MB #设置单个文件最大长度
       max-request-size: 100MB #最大请求文件的大小
+  task:
+    execution:
+      thread-name-prefix: 3x-thread-task-
+      pool:
+        core-size: 50
+        max-size: 200
+        keep-alive: 20s
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://47.93.4.43:3306/3xdb?&useUnicode=true&characterEncoding=utf-8&useSSL=false

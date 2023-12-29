@@ -351,8 +351,10 @@ public class SuoFundServiceImpl implements SuoFundService {
 
         void toSetType (List<SuoFundCheckExcel> batchList) {
             taskExecutor.execute(() -> {
+                long s = 0;
                 try {
                     semaphore.acquire();
+                    s = System.currentTimeMillis();
                     batchList.forEach(data -> {
                         String bt = data.get业务类型();
                         List<String> l = new ArrayList<>();
@@ -397,6 +399,7 @@ public class SuoFundServiceImpl implements SuoFundService {
                 }catch (Exception e) {
                     LOGGER.error("", e);
                 }finally {
+                    LOGGER.info("--- 解析业务发生类型完成 数据量 {} 耗时 --- {}", batchList.size(), System.currentTimeMillis() - s);
                     semaphore.release();
                 }
             });
