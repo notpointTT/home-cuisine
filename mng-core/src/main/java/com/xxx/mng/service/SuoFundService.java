@@ -2,7 +2,9 @@ package com.xxx.mng.service;
 
 import com.xxx.mng.entities.SuoPzFundCheck;
 import com.xxx.mng.entities.SuoPzFundCheckRecordEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -21,5 +23,9 @@ public interface SuoFundService {
     List<SuoPzFundCheckRecordEntity> fundCheckList();
 
     List<? extends SuoPzFundCheck> fundCheckDetailList(String checkId, String type);
+
+    void importFundDetail(MultipartFile file, String checkId, String type);
+
+    void analysisFund(String checkId, MultipartFile file, HttpServletResponse response);
 
 }

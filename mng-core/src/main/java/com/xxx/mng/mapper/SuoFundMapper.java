@@ -1,6 +1,7 @@
 package com.xxx.mng.mapper;
 
 import com.xxx.mng.entities.SuoPzFundCheckRecordEntity;
+import com.xxx.mng.models.SimpleFundInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +25,11 @@ public interface SuoFundMapper {
     List<SuoPzFundCheckRecordEntity> selectFundCheckList();
 
     List<Map<String, Object>> fundCheckDetailList(@Param("table") String table, @Param("checkId") String checkId);
+
+    void deleteFundCheckDetail(@Param("table") String table, @Param("checkId") String checkId);
+
+    List<SimpleFundInfo> findAllSimpleFundList(@Param("checkId") String checkId);
+
+    void executeSql(String sql);
 
 }

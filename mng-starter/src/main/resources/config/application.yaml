@@ -15,11 +15,16 @@ eureka:
 spring:
   application:
     name: 3x-mng
+  servlet:
+    multipart:
+      max-file-size: 20MB #设置单个文件最大长度
+      max-request-size: 100MB #最大请求文件的大小
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://47.93.4.43:3306/3xdb?&useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: Yyl@4012
+
 
 mybatis-plus:
   configuration:
