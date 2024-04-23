@@ -25,7 +25,7 @@
         <druid.version>1.1.16</druid.version>
         <mybatis.spring.boot.version>1.3.0</mybatis.spring.boot.version>
         <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
-        <spring.cloud.alibaba>2.1.0.RELEASE</spring.cloud.alibaba>
+        <spring.cloud.alibaba>2.2.0.RELEASE</spring.cloud.alibaba>
     </properties>
 
     <!--子模块继承之后，提供作用：锁定版本+子module不用写groupId和version-->

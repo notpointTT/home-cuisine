@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: 3x-mng
+  servlet:
+    multipart:
+      max-file-size: 20MB #设置单个文件最大长度
+      max-request-size: 100MB #最大请求文件的大小
+  cloud:
+    nacos:
+      server-addr: http://192.168.40.100:31048
