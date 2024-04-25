@@ -1,4 +1,4 @@
-package com.xxx.mng;
+package com.xxx.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,11 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan("com.xxx.mng")
-public class XxxMngStarter {
+public class UserStarter {
     public static void main(String[] args) {
         System.setProperty("nacos.logging.default.config.enabled","false");
-        SpringApplication.run(XxxMngStarter.class, args);
+        SpringApplication.run(UserStarter.class, args);
         System.out.println("run success");
     }
 }
