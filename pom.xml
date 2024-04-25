@@ -13,6 +13,12 @@
     <modules>
         <module>common</module>
         <module>mng</module>
+        <module>screen</module>
+        <module>movie</module>
+        <module>cinema</module>
+        <module>user</module>
+        <module>vip</module>
+        <module>promotion</module>
     </modules>
 
     <!--统一管理jar包版本-->
