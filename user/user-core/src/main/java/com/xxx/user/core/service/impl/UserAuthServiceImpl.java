@@ -1,12 +1,15 @@
 package com.xxx.user.core.service.impl;
 
 import com.xxx.user.core.service.UserAuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author a1234
  * @description
  * @create 2024-04-25 16:55
  */
+@Service
 public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public void sendVerificationCode(String phoneNum) {
