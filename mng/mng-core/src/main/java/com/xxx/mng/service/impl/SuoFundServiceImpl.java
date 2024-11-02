@@ -4,18 +4,15 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.support.ExcelTypeEnum;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.base.CaseFormat;
-import com.xxx.common.exceptions.XxxException;
+import com.xxx.common.exceptions.BaseException;
 import com.xxx.common.utils.UUIDUtil;
 import com.xxx.mng.entities.*;
 import com.xxx.mng.mapper.SuoFundMapper;
 import com.xxx.mng.models.SimpleFundInfo;
 import com.xxx.mng.models.SuoFundCheckExcel;
 import com.xxx.mng.service.SuoFundService;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +24,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 /**
@@ -109,7 +102,7 @@ public class SuoFundServiceImpl implements SuoFundService {
             inputStream.close();
 
         }catch (Exception e) {
-            throw new XxxException(e);
+            throw new BaseException(e);
         }finally {
             LOGGER.info("----- {}", System.currentTimeMillis() - l);
         }
@@ -128,7 +121,7 @@ public class SuoFundServiceImpl implements SuoFundService {
 
             response.flushBuffer();
         }catch (Exception e) {
-            throw new XxxException(e);
+            throw new BaseException(e);
         }
 
     }
@@ -199,7 +192,7 @@ public class SuoFundServiceImpl implements SuoFundService {
                 preparedStatement.execute();
 
             }catch (Exception e) {
-                throw new XxxException(e);
+                throw new BaseException(e);
             }finally {
                 if (connection != null) {
                     try {

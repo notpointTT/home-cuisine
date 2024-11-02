@@ -2,6 +2,7 @@ package com.xxx.user.core.web;
 
 import com.xxx.common.annotation.IgnoreAuth;
 import com.xxx.common.model.ApiResult;
+import com.xxx.user.core.model.auth.UsernameLoginModel;
 import com.xxx.user.core.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * @create 2024-04-25 16:51
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/user/auth")
 @IgnoreAuth
 public class UserAuthController {
 
@@ -33,6 +34,11 @@ public class UserAuthController {
     @PostMapping("/login")
     public ApiResult<?> login(@RequestParam("phoneNum") String phoneNum, @RequestParam("phoneNum") String verificationCode) {
         return ApiResult.success(userAuthService.login(phoneNum, verificationCode));
+    }
+
+    @PostMapping("/loginUsername")
+    public ApiResult<?> loginUsername(@RequestBody UsernameLoginModel loginModel) {
+        return ApiResult.success(userAuthService.loginUsername(loginModel));
     }
 
 }

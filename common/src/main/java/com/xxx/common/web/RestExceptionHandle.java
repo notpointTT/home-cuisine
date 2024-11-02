@@ -1,6 +1,6 @@
 package com.xxx.common.web;
 
-import com.xxx.common.exceptions.XxxException;
+import com.xxx.common.exceptions.BaseException;
 import com.xxx.common.model.ApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +20,11 @@ public class RestExceptionHandle {
     @ExceptionHandler(Exception.class)
     public ApiResult<?> handleException(Exception e) {
         LOGGER.error("发生未知异常", e);
-        return ApiResult.error("发生未知异常");
+        return ApiResult.error("发生未知异常 -->> " + e.getMessage());
     }
 
-    public ApiResult<?> handle3xException(XxxException e) {
+    @ExceptionHandler(BaseException.class)
+    public ApiResult<?> handle3xException(BaseException e) {
         String message = e.getMessage();
         if (StringUtils.isEmpty(message)) {
             message = "发生未知异常-3x";

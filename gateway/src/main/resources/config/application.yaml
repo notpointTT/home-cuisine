@@ -4,6 +4,15 @@ spring:
     url: jdbc:mysql://47.93.4.43:3306/3xdb?&useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: Yyl@4012
+  cloud:
+    gateway:
+      routes:
+        - id: user
+          uri: lb://3x-user-dev
+          predicates:
+            - Path=/user/**
+          filters:
+            - RewritePath=/user/?(?<segment>.*),/$\{segment}
   task:
     execution:
       thread-name-prefix: 3x-thread-task-

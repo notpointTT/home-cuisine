@@ -4,6 +4,9 @@ spring:
     url: jdbc:mysql://47.93.4.43:3306/3xdb?&useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: Yyl@4012
+  redis:
+    host: 47.93.4.43
+    port: 6379
   task:
     execution:
       thread-name-prefix: 3x-thread-task-
@@ -11,21 +14,20 @@ spring:
         core-size: 50
         max-size: 200
         keep-alive: 20s
-
-#  kafka:
-#    bootstrap-servers: 121.36.32.146:9092
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer # 序列化key的类
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer # 反序列化value的类
-#    # 消费者 key value的反序列化方式
-#    consumer:
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      #指定消费者组的 group_id
-#      group-id: 3x-mng-group
-#      enable-auto-commit: true
-#      auto-commit-interval: 1000
-#      auto-offset-reset: latest
+  kafka:
+    bootstrap-servers: 121.36.32.146:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer # 序列化key的类
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer # 反序列化value的类
+    # 消费者 key value的反序列化方式
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #指定消费者组的 group_id
+      group-id: 3x-mng-group
+      enable-auto-commit: true
+      auto-commit-interval: 1000
+      auto-offset-reset: latest
 
 
 mybatis-plus:

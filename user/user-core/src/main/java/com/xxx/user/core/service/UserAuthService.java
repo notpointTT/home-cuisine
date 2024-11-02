@@ -1,5 +1,7 @@
 package com.xxx.user.core.service;
 
+import com.xxx.user.core.model.auth.UsernameLoginModel;
+
 /**
  * @author a1234
  * @description
@@ -29,6 +31,8 @@ public interface UserAuthService {
      * @return token
      */
     String login(String phoneNum, String verificationCode);
+
+    String loginUsername(UsernameLoginModel loginModel);
 
     /**
      * 验证token是否有效
