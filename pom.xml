@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.xxx</groupId>
-    <artifactId>3x</artifactId>
+    <groupId>com.hc</groupId>
+    <artifactId>home-cuisine</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
@@ -13,14 +13,12 @@
     <modules>
         <module>common</module>
         <module>mng</module>
-        <module>screen</module>
-        <module>movie</module>
-        <module>cinema</module>
         <module>user</module>
-        <module>vip</module>
-        <module>promotion</module>
         <module>gateway</module>
-        <module>gn</module>
+        <module>merchant</module>
+        <module>menu</module>
+        <module>order</module>
+        <module>evaluate</module>
     </modules>
 
     <!--统一管理jar包版本-->
@@ -34,6 +32,10 @@
         <mybatis.spring.boot.version>1.3.0</mybatis.spring.boot.version>
         <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
         <spring.cloud.alibaba>2.2.0.RELEASE</spring.cloud.alibaba>
+
+        <easyexcel.version>3.2.1</easyexcel.version>
+        <fastjson.version>1.2.75</fastjson.version>
+        <mp.version>3.4.2</mp.version>
     </properties>
 
     <!--子模块继承之后，提供作用：锁定版本+子module不用写groupId和version-->
@@ -102,12 +104,18 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>3.4.2</version>
+                <version>${mp.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.75</version>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
             </dependency>
 
         </dependencies>

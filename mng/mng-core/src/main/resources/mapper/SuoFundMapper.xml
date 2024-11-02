@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xxx.mng.mapper.SuoFundMapper">
+<mapper namespace="com.hc.mng.mapper.SuoFundMapper">
 
     <insert id="createFundCheck">
         insert into suo_mz_fund_check_record (id, month, start_time)
         values (#{id}, #{month}, #{startTime})
     </insert>
 
-    <select id="selectFundCheckList" resultType="com.xxx.mng.entities.SuoPzFundCheckRecordEntity">
+    <select id="selectFundCheckList" resultType="com.hc.mng.entities.SuoPzFundCheckRecordEntity">
         select * from suo_mz_fund_check_record
     </select>
 
@@ -19,7 +19,7 @@
         delete from ${table} where check_id = #{checkId}
     </select>
 
-    <select id="findAllSimpleFundList" resultType="com.xxx.mng.models.SimpleFundInfo">
+    <select id="findAllSimpleFundList" resultType="com.hc.mng.models.SimpleFundInfo">
         SELECT 订单号, '圈子' as 业务类型  from pz圈子 p
         WHERE CHECK_id = #{checkId}
         union all
