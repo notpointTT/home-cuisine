@@ -1,8 +1,14 @@
 package com.hc.user.core.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.hc.common.auth.AuthUserInfo;
+import com.hc.common.auth.UserTokenCache;
+import com.hc.common.verification.VerificationCodeHandler;
+import com.hc.user.core.mapper.UserMapper;
+import com.hc.user.core.model.auth.SimpleAuthUserInfo;
 import com.hc.user.core.model.auth.UsernameLoginModel;
-import com.xxx.common.exceptions.BaseException;
-import com.xxx.common.utils.UUIDUtil;
+import com.hc.common.exceptions.BaseException;
+import com.hc.common.utils.UUIDUtil;
 import com.hc.user.core.service.UserAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -23,68 +30,71 @@ import java.util.concurrent.TimeUnit;
 public class UserAuthServiceImpl implements UserAuthService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthServiceImpl.class);
 
+    private static final String LOGIN_CODE_TYPE = "LOGIN";
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private UserTokenCache userTokenCache;
+    @Autowired
+    private VerificationCodeHandler verificationCodeHandler;
+    @Autowired
+    private UserMapper userMapper;
 
-    private static final long CODE_TIME_OUT_SECOND = 10;
-    private static final long TOKEN_TIME_OUT_SECOND = 30*60;
 
     @Override
     public void sendVerificationCode(String phoneNum) {
         // 验证 1 分钟内是否发送过
         LOGGER.info(phoneNum);
+        String code = "9527";
+        verificationCodeHandler.sendCode(phoneNum, code, LOGIN_CODE_TYPE);
 
-        String uuid = UUIDUtil.uuid();
-        // Redis 缓存验证码
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        Boolean res = ops.setIfAbsent(phoneNum+":V_CODE", uuid, CODE_TIME_OUT_SECOND, TimeUnit.SECONDS);
-        // 验证 是否缓存成功
-        if (res == null || Boolean.FALSE.equals(res)) {
-            throw new BaseException("请勿频繁发送");
-        }
-
-        // todo 发送验证码
-
-        LOGGER.info("{} 验证码 -->> {}", phoneNum, uuid);
+        LOGGER.info("{} 验证码 -->> {}", phoneNum, code);
     }
 
+
     @Override
+    @Transactional
     public String registerAndLogin(String phoneNum, String verificationCode) {
-        // 验证 verificationCode 是否合法
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        String v = ops.get(phoneNum);
-        if (!Objects.equals(v, verificationCode)) {
-            throw new BaseException("验证码无效");
-        }
 
         // 用户信息注册
+        SimpleAuthUserInfo userInfo = userMapper.queryAuthUser(phoneNum);
+        if (userInfo == null) {
+            registerUser(phoneNum);
+        }
 
         // 执行登录操作
         return login(phoneNum, verificationCode);
     }
 
-    @Override
-    public String login(String phoneNum, String verificationCode) {
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        String uuid = UUIDUtil.uuid();
-        String key = uuid + ":PHONE:TOKEN";
-        ops.set(key, phoneNum, TOKEN_TIME_OUT_SECOND, TimeUnit.SECONDS);
-        return key;
+    void registerUser(String phoneNum) {
+        userMapper.insertUser(UUIDUtil.uuid(), phoneNum);
     }
 
     @Override
-    public String loginUsername(UsernameLoginModel loginModel) {
-        String username = loginModel.getUsername();
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        String uuid = UUIDUtil.uuid();
-        String key = uuid + ":USERNAME:TOKEN";
-        ops.set(key, username, TOKEN_TIME_OUT_SECOND, TimeUnit.SECONDS);
-        return key;
+    public String login(String phoneNum, String verificationCode) {
+        // 校验验证码是否合法
+        boolean available = verificationCodeHandler.codeAvailable(phoneNum, verificationCode, LOGIN_CODE_TYPE);
+        if (!available) {
+            throw new BaseException("验证码失效");
+        }
+
+        SimpleAuthUserInfo authUserInfo = userMapper.queryAuthUser(phoneNum);
+        String token = UUIDUtil.uuid();
+        userTokenCache.setToken(token, authUserInfo);
+
+        return token;
     }
 
     @Override
     public String tokenValidate(String token) {
-        return null;
+        AuthUserInfo authUserInfo = userTokenCache.tokenUser(token);
+        if (authUserInfo == null) {
+            return null;
+        }
+
+        return token;
     }
+
+
 }

@@ -1,8 +1,8 @@
 package com.hc.user.core.web;
 
 import com.hc.user.core.model.auth.UsernameLoginModel;
-import com.xxx.common.annotation.IgnoreAuth;
-import com.xxx.common.model.ApiResult;
+import com.hc.common.annotation.IgnoreAuth;
+import com.hc.common.model.ApiResult;
 import com.hc.user.core.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,18 +27,14 @@ public class UserAuthController {
     }
 
     @PostMapping("/registerAndLogin")
-    public ApiResult<?> registerAndLogin(@RequestParam("phoneNum") String phoneNum, @RequestParam("phoneNum") String verificationCode) {
+    public ApiResult<?> registerAndLogin(@RequestParam("phoneNum") String phoneNum, @RequestParam("verificationCode") String verificationCode) {
         return ApiResult.success(userAuthService.registerAndLogin(phoneNum, verificationCode));
     }
 
     @PostMapping("/login")
-    public ApiResult<?> login(@RequestParam("phoneNum") String phoneNum, @RequestParam("phoneNum") String verificationCode) {
+    public ApiResult<?> login(@RequestParam("phoneNum") String phoneNum, @RequestParam("verificationCode") String verificationCode) {
         return ApiResult.success(userAuthService.login(phoneNum, verificationCode));
     }
 
-    @PostMapping("/loginUsername")
-    public ApiResult<?> loginUsername(@RequestBody UsernameLoginModel loginModel) {
-        return ApiResult.success(userAuthService.loginUsername(loginModel));
-    }
 
 }

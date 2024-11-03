@@ -32,7 +32,6 @@ public interface UserAuthService {
      */
     String login(String phoneNum, String verificationCode);
 
-    String loginUsername(UsernameLoginModel loginModel);
 
     /**
      * 验证token是否有效

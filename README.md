@@ -30,7 +30,7 @@ home-cuisine
 └── merchant - 商家服务
     ├── 入驻
     ├── 信息维护
-├── mng - 管理运营服务
+├── waiter - 小二服务
 ├── menu - 菜单服务
 ├── order - 订单服务
 ├── pay - 支付服务-[Jeepay]

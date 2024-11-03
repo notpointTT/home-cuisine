@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: hc-user
   cloud:
     nacos:
       server-addr: http://nacos:8848

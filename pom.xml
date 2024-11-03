@@ -12,7 +12,7 @@
 
     <modules>
         <module>common</module>
-        <module>mng</module>
+        <module>waiter</module>
         <module>user</module>
         <module>gateway</module>
         <module>merchant</module>
@@ -27,8 +27,8 @@
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.10</lombok.version>
         <log4j.version>1.2.17</log4j.version>
-        <mysql.version>8.0.11</mysql.version>
-        <druid.version>1.1.16</druid.version>
+        <mysql.version>5.1.3</mysql.version>
+        <druid.version>1.1.8</druid.version>
         <mybatis.spring.boot.version>1.3.0</mybatis.spring.boot.version>
         <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
         <spring.cloud.alibaba>2.2.0.RELEASE</spring.cloud.alibaba>

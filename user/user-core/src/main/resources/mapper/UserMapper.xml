@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis的DTD约束-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hc.user.core.mapper.UserMapper">
+    <select id="queryAuthUser" resultType="com.hc.user.core.model.auth.SimpleAuthUserInfo">
+
+        select * from user_info where phone_num = #{phoneNum}
+
+    </select>
+
+    <insert id="insertUser">
+        insert into user_info (user_id, phone_num) values (#{userId}, #{phoneNum})
+    </insert>
+
+</mapper>

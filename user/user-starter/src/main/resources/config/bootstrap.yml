@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: 3x-user-dev
+    name: hc-user-dev
   servlet:
     multipart:
       max-file-size: 20MB #设置单个文件最大长度
