@@ -1,10 +1,13 @@
 package com.hc.user.core.web;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.hc.user.core.model.auth.UsernameLoginModel;
 import com.hc.common.annotation.IgnoreAuth;
 import com.hc.common.model.ApiResult;
 import com.hc.user.core.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -21,6 +24,7 @@ public class UserAuthController {
     private UserAuthService userAuthService;
 
     @GetMapping("/sendVerificationCode")
+//    @SentinelResource("hc-user:sendVerificationCode")
     public ApiResult<?> sendVerificationCode(@RequestParam("phoneNum") String phoneNum) {
         userAuthService.sendVerificationCode(phoneNum);
         return ApiResult.success("验证码发送成功");

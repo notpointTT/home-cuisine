@@ -32,7 +32,8 @@ public class VerificationCodeHandler {
         Boolean res = ops.setIfAbsent(codeKey, code, CODE_TIME_OUT_SECOND, TimeUnit.SECONDS);
         // 验证 是否缓存成功
         if (res == null || Boolean.FALSE.equals(res)) {
-            throw new BaseException("请勿频繁发送");
+//            throw new BaseException("请勿频繁发送");
+            return;
         }
 
         // 发送验证码
