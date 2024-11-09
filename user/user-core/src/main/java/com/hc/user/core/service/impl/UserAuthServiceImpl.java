@@ -64,7 +64,8 @@ public class UserAuthServiceImpl implements UserAuthService {
         }
 
         // 执行登录操作
-        return login(phoneNum, verificationCode);
+        boolean login = login(phoneNum, verificationCode);
+        return "";
     }
 
     void registerUser(String phoneNum) {
@@ -72,7 +73,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    public String login(String phoneNum, String verificationCode) {
+    public boolean login(String phoneNum, String verificationCode) {
         // 校验验证码是否合法
         boolean available = verificationCodeHandler.codeAvailable(phoneNum, verificationCode, LOGIN_CODE_TYPE);
         if (!available) {
@@ -83,7 +84,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         String token = UUIDUtil.uuid();
         userTokenCache.setToken(token, authUserInfo);
 
-        return token;
+        return true;
     }
 
     @Override

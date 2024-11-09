@@ -36,6 +36,7 @@
         <easyexcel.version>3.2.1</easyexcel.version>
         <fastjson.version>1.2.75</fastjson.version>
         <mp.version>3.4.2</mp.version>
+        <jwt.version>0.7.0</jwt.version>
     </properties>
 
     <!--子模块继承之后，提供作用：锁定版本+子module不用写groupId和version-->
@@ -117,6 +118,13 @@
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

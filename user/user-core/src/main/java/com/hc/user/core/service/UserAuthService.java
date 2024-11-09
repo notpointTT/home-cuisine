@@ -1,13 +1,13 @@
 package com.hc.user.core.service;
 
-import com.hc.user.core.model.auth.UsernameLoginModel;
+import com.hc.user.core.oauth.beans.provider.AbstractPhoneCodeLogin;
 
 /**
  * @author a1234
  * @description
  * @create 2024-04-25 16:05
  */
-public interface UserAuthService {
+public interface UserAuthService extends AbstractPhoneCodeLogin {
 
     /**
      * 获取/发送手机验证码
@@ -30,7 +30,7 @@ public interface UserAuthService {
      * @param verificationCode 验证码
      * @return token
      */
-    String login(String phoneNum, String verificationCode);
+    boolean login(String phoneNum, String verificationCode);
 
 
     /**

@@ -24,7 +24,6 @@ public class UserAuthController {
     private UserAuthService userAuthService;
 
     @GetMapping("/sendVerificationCode")
-//    @SentinelResource("hc-user:sendVerificationCode")
     public ApiResult<?> sendVerificationCode(@RequestParam("phoneNum") String phoneNum) {
         userAuthService.sendVerificationCode(phoneNum);
         return ApiResult.success("验证码发送成功");
