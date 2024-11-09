@@ -3,6 +3,7 @@ package com.hc.user.core.oauth.beans.handlers;
 import com.alibaba.fastjson.JSON;
 import com.hc.common.model.ApiResult;
 import com.hc.common.utils.JwtUtil;
+import com.hc.user.core.properties.NacosHcUserConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private NacosHcUserConfigProperties configProperties;
     
     @Override
     public void onAuthenticationSuccess(
@@ -30,10 +34,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             throws IOException, ServletException {
 
         // 生成 token 返回前端
+        Object principal = authentication.getPrincipal();
         // accessToken 过期时间 30分钟
-        String accessToken = jwtUtil.createToken(authentication.getPrincipal().toString(), 60 * 30L);
+        Long accessTokenExpireSeconds = configProperties.getAuth().getAccessTokenExpireSeconds();
         // refreshToken 过期时间 6小时
-        String refreshToken = jwtUtil.createToken(accessToken, 6 * 60 * 60L);
+        Long refreshTokenExpireSeconds = configProperties.getAuth().getRefreshTokenExpireSeconds();
+        String accessToken = jwtUtil.createToken(principal.toString(), accessTokenExpireSeconds);
+        String refreshToken = jwtUtil.createToken(accessToken, refreshTokenExpireSeconds);
 
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("accessToken", accessToken);
