@@ -1,7 +1,7 @@
 package com.hc.user.core.oauth;
 
 import com.hc.common.constant.CommonConstant;
-import com.hc.user.core.oauth.beans.token.JwtUtil;
+import com.hc.common.utils.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.TokenStore;

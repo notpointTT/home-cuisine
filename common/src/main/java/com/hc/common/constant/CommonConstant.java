@@ -19,7 +19,7 @@ public final class CommonConstant {
     }
 
     public static final class LoginType {
-        public static final String PHONE_CODE = "PHONE_CODE";
+        public static final String PHONE_CODE = "SMS";
         public static final String USER_PASSWORD = "USER_PASSWORD";
     }
 

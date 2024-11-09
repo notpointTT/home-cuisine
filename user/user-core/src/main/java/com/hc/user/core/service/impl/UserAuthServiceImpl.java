@@ -1,25 +1,19 @@
 package com.hc.user.core.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.hc.common.auth.AuthUserInfo;
 import com.hc.common.auth.UserTokenCache;
 import com.hc.common.verification.VerificationCodeHandler;
 import com.hc.user.core.mapper.UserMapper;
 import com.hc.user.core.model.auth.SimpleAuthUserInfo;
-import com.hc.user.core.model.auth.UsernameLoginModel;
-import com.hc.common.exceptions.BaseException;
 import com.hc.common.utils.UUIDUtil;
+import com.hc.user.core.oauth.exceptions.SmsInvalidException;
 import com.hc.user.core.service.UserAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author a1234
@@ -77,12 +71,22 @@ public class UserAuthServiceImpl implements UserAuthService {
         // 校验验证码是否合法
         boolean available = verificationCodeHandler.codeAvailable(phoneNum, verificationCode, LOGIN_CODE_TYPE);
         if (!available) {
-            throw new BaseException("验证码失效");
+            throw new SmsInvalidException();
         }
 
-        SimpleAuthUserInfo authUserInfo = userMapper.queryAuthUser(phoneNum);
-        String token = UUIDUtil.uuid();
-        userTokenCache.setToken(token, authUserInfo);
+//        SimpleAuthUserInfo authUserInfo = userMapper.queryAuthUser(phoneNum);
+//        String token = UUIDUtil.uuid();
+//        userTokenCache.setToken(token, authUserInfo);
+
+        return true;
+    }
+
+    @Override
+    public boolean smsLogin(String phone, String code) {
+        boolean available = verificationCodeHandler.codeAvailable(phone, code, LOGIN_CODE_TYPE);
+        if (!available) {
+            throw new SmsInvalidException();
+        }
 
         return true;
     }
