@@ -37,7 +37,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
 
     @Override
-    public void sendVerificationCode(String phoneNum) {
+    public void sendSms(String phoneNum) {
         // 验证 1 分钟内是否发送过
         LOGGER.info(phoneNum);
         String code = "9527";
@@ -49,7 +49,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     @Transactional
-    public String registerAndLogin(String phoneNum, String verificationCode) {
+    public String registerAndLogin(String phoneNum, String smsCode) {
 
         // 用户信息注册
         SimpleAuthUserInfo userInfo = userMapper.queryAuthUser(phoneNum);
@@ -58,7 +58,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         }
 
         // 执行登录操作
-        boolean login = login(phoneNum, verificationCode);
+        boolean login = login(phoneNum, smsCode);
         return "";
     }
 
@@ -67,9 +67,9 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    public boolean login(String phoneNum, String verificationCode) {
+    public boolean login(String phoneNum, String smsCode) {
         // 校验验证码是否合法
-        boolean available = verificationCodeHandler.codeAvailable(phoneNum, verificationCode, LOGIN_CODE_TYPE);
+        boolean available = verificationCodeHandler.codeAvailable(phoneNum, smsCode, LOGIN_CODE_TYPE);
         if (!available) {
             throw new SmsInvalidException();
         }

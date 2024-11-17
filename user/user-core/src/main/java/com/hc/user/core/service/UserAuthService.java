@@ -13,24 +13,24 @@ public interface UserAuthService extends AbstractSmsLogin {
      * 获取/发送手机验证码
      * @param phoneNum
      */
-    void sendVerificationCode(String phoneNum);
+    void sendSms(String phoneNum);
 
     /**
      * 注册并登录
      * 注册成功后再登录
      * @param phoneNum
-     * @param verificationCode
+     * @param smsCode
      * @return 登录成功后的 Token
      */
-    String registerAndLogin(String phoneNum, String verificationCode);
+    String registerAndLogin(String phoneNum, String smsCode);
 
     /**
      * 登录接口
      * @param phoneNum 手机号码
-     * @param verificationCode 验证码
+     * @param smsCode 验证码
      * @return token
      */
-    boolean login(String phoneNum, String verificationCode);
+    boolean login(String phoneNum, String smsCode);
 
 
     /**

@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
     public JwtLoginFilter() {
-        super(new AntPathRequestMatcher("/user/auth/login", "POST"));
+        super(new AntPathRequestMatcher("/auth/login", "POST"));
     }
 
     @Override

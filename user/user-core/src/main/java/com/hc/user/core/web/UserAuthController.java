@@ -16,27 +16,27 @@ import org.springframework.web.bind.annotation.*;
  * @create 2024-04-25 16:51
  */
 @RestController
-@RequestMapping("/user/auth")
+@RequestMapping("/auth")
 @IgnoreAuth
 public class UserAuthController {
 
     @Autowired
     private UserAuthService userAuthService;
 
-    @GetMapping("/sendVerificationCode")
-    public ApiResult<?> sendVerificationCode(@RequestParam("phoneNum") String phoneNum) {
-        userAuthService.sendVerificationCode(phoneNum);
+    @GetMapping("/sms/send")
+    public ApiResult<?> sendSms(@RequestParam("phone") String phoneNum) {
+        userAuthService.sendSms(phoneNum);
         return ApiResult.success("验证码发送成功");
     }
 
     @PostMapping("/registerAndLogin")
-    public ApiResult<?> registerAndLogin(@RequestParam("phoneNum") String phoneNum, @RequestParam("verificationCode") String verificationCode) {
-        return ApiResult.success(userAuthService.registerAndLogin(phoneNum, verificationCode));
+    public ApiResult<?> registerAndLogin(@RequestParam("phone") String phoneNum, @RequestParam("smsCode") String smsCode) {
+        return ApiResult.success(userAuthService.registerAndLogin(phoneNum, smsCode));
     }
 
     @PostMapping("/login")
-    public ApiResult<?> login(@RequestParam("phoneNum") String phoneNum, @RequestParam("verificationCode") String verificationCode) {
-        return ApiResult.success(userAuthService.login(phoneNum, verificationCode));
+    public ApiResult<?> login(@RequestParam("phone") String phoneNum, @RequestParam("smsCode") String smsCode) {
+        return ApiResult.success(userAuthService.login(phoneNum, smsCode));
     }
 
 
