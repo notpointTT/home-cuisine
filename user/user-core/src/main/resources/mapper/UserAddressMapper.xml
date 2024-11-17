@@ -10,6 +10,11 @@
         select * from user_address where user_id = #{userId}
     </select>
 
+    <select id="detail" resultType="com.hc.user.core.entities.UserAddressEntity">
+        select * from user_address where id = #{id}
+    </select>
+
+
     <select id="resetOtherDefault">
         update user_address set is_default = 0
         where user_id = (select tt.ui from (

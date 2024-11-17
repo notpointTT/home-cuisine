@@ -1,5 +1,8 @@
 package com.hc.user.core.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.hc.common.utils.UUIDUtil;
 import com.hc.user.core.entities.UserAddressEntity;
 import com.hc.user.core.mapper.UserAddressMapper;
 import com.hc.user.core.mapper.UserMapper;
@@ -22,6 +25,33 @@ public class UserAddressServiceImpl implements UserAddressService {
         List<UserAddressEntity> list = addressMapper.addressList("1");
 
         return list;
+    }
+
+    @Override
+    public UserAddressEntity detail(String id) {
+        return addressMapper.detail(id);
+    }
+
+    @Override
+    @Transactional
+    public void update(String id, UserAddressEntity address) {
+        address.setId(id);
+        addressMapper.updateById(address);
+        if (address.getIsDefault() == 1) {
+            setDefault(id);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void add(UserAddressEntity address) {
+        String id = UUIDUtil.uuid();
+        address.setId(id);
+        address.setUserId("1");
+        addressMapper.insert(address);
+        if (address.getIsDefault() == 1) {
+            setDefault(id);
+        }
     }
 
     @Override

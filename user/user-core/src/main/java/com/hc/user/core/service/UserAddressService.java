@@ -8,6 +8,12 @@ public interface UserAddressService {
 
     List<UserAddressEntity> list();
 
+    UserAddressEntity detail(String id);
+
+    void update(String id, UserAddressEntity address);
+
+    void add(UserAddressEntity address);
+
     void setDefault(String id);
 
 }
