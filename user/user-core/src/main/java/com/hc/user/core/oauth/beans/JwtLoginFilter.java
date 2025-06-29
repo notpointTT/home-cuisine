@@ -2,6 +2,7 @@ package com.hc.user.core.oauth.beans;
 
 import com.hc.common.constant.CommonConstant;
 import com.hc.user.core.oauth.beans.token.SmsAuthenticationToken;
+import com.hc.user.core.oauth.beans.token.WxAuthenticationToken;
 import com.hc.user.core.oauth.exceptions.UnsupportedLoginTypeException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,6 +30,11 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
             String code = request.getParameter("code");
             authentication = new SmsAuthenticationToken(phone, code);
         }
+        if (CommonConstant.LoginType.WX.equals(loginType)) {
+            String code = request.getParameter("code");
+            authentication = new WxAuthenticationToken(code);
+        }
+
         if (authentication == null) {
             throw new UnsupportedLoginTypeException();
         }

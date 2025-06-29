@@ -12,6 +12,8 @@ public final class CommonConstant {
 
     public static final String TOKEN_HEADER_NAME = "Authority";
 
+    public static final int SMS_CODE_LENGTH = 6;
+
     public static final class TokenConstant {
 
         // 全局通用 秘钥
@@ -20,6 +22,7 @@ public final class CommonConstant {
 
     public static final class LoginType {
         public static final String PHONE_CODE = "SMS";
+        public static final String WX = "WX";
         public static final String USER_PASSWORD = "USER_PASSWORD";
     }
 

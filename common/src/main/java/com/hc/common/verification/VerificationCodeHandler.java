@@ -1,16 +1,18 @@
 package com.hc.common.verification;
 
-import com.hc.common.exceptions.BaseException;
 import com.hc.common.exceptions.VerificationCodeSendException;
-import com.hc.common.utils.ShortMsgUtil;
+import com.hc.common.sms.SmsSender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@ConditionalOnBean(SmsSender.class)
 public class VerificationCodeHandler {
 
     /**
@@ -23,6 +25,9 @@ public class VerificationCodeHandler {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private SmsSender smsSender;
 
     public void sendCode(String phoneNum, String code, String type) {
 //        String code = "9527";
@@ -49,14 +54,13 @@ public class VerificationCodeHandler {
 
     public boolean codeAvailable(String phoneNum, String code, String type) {
         String codeKey = keyPrefix(type) + phoneNum;
-        Long expire = redisTemplate.getExpire(codeKey);
-        // 过期时间 大于0
-        return expire != null && expire > 0;
+        String v = redisTemplate.opsForValue().get(codeKey);
+        return Objects.equals(code, v);
     }
 
     String sendCode0(String phoneNum, String code, String type) {
-
-        return ShortMsgUtil.sendVerificationCode(type, phoneNum, code);
+        smsSender.send(phoneNum, code);
+        return code;
     }
 
     String keyPrefix(String type) {

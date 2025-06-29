@@ -1,0 +1,33 @@
+package com.hc.user.core.oauth.beans.token;
+
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+
+import java.util.ArrayList;
+
+public class WxAuthenticationToken extends AbstractAuthenticationToken {
+
+    private final String code;
+
+    public WxAuthenticationToken(String code) {
+        super(new ArrayList<>());
+        this.code = code;
+    }
+
+    /**
+     * 令牌
+     * @return
+     */
+    @Override
+    public Object getCredentials() {
+        return "";
+    }
+
+    /**
+     * 账户
+     * @return
+     */
+    @Override
+    public String getPrincipal() {
+        return code;
+    }
+}

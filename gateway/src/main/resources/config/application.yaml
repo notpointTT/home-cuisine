@@ -1,21 +1,21 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.93.4.43:3306/3xdb?&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://192.168.40.110:3306/hc?&useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
-    password: Yyl@4012
-  cloud:
-    gateway:
-      routes:
-        - id: user
-          uri: lb://3x-user-dev
-          predicates:
-            - Path=/user/**
-          filters:
-            - RewritePath=/user/?(?<segment>.*),/$\{segment}
+    password: yyl@4012
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: user
+#          uri: lb://hc-user
+#          predicates:
+#            - Path=/user/**
+#          filters:
+#            - RewritePath=/user/?(?<segment>.*),/$\{segment}
   task:
     execution:
-      thread-name-prefix: 3x-thread-task-
+      thread-name-prefix: hc-thread-task-
       pool:
         core-size: 50
         max-size: 200

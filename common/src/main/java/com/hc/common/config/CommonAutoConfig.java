@@ -12,6 +12,4 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan("com.hc.common")
 public class CommonAutoConfig {
 
-
-
 }

@@ -37,6 +37,7 @@
         <fastjson.version>1.2.75</fastjson.version>
         <mp.version>3.4.2</mp.version>
         <jwt.version>0.7.0</jwt.version>
+        <ali-sms.version>3.0.0</ali-sms.version>
     </properties>
 
     <!--子模块继承之后，提供作用：锁定版本+子module不用写groupId和version-->
@@ -117,6 +118,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>dysmsapi20170525</artifactId>
+                <version>${ali-sms.version}</version>
             </dependency>
 
             <dependency>

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "hc-user",
+    "uri": "lb://hc-user",
+    "predicates": [
+      {
+        "name": "Path",
+        "args": {
+          "pattern": "/user/**"
+        }
+      }
+    ]
+  }
+]

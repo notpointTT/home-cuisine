@@ -46,7 +46,11 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:mapper/**/*Mapper.xml
 
-
+aliyun:
+  sms:
+    accessKeyId: LTAI5tApknKYkALHykq3tavp
+    accessKeySecret: hGqfzujoI4BEOIrq0lUNJwriH3GFyA
+    endpoint: dysmsapi.aliyuncs.com
 
 logging:
   config: classpath:config/logback-spring.xml
