@@ -1,5 +1,7 @@
 package com.hc.common.sms;
 
+import com.hc.common.utils.DesUtil;
+import org.bouncycastle.jcajce.provider.symmetric.DES;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -31,9 +33,9 @@ public class SmsConfig {
     public com.aliyun.dysmsapi20170525.Client createClient() throws Exception {
         com.aliyun.teaopenapi.models.Config config = new com.aliyun.teaopenapi.models.Config()
                 // 您的 AccessKey ID
-                .setAccessKeyId(accessKeyId)
+                .setAccessKeyId(DesUtil.desDecrypt(accessKeyId, DesUtil.key))
                 // 您的 AccessKey Secret
-                .setAccessKeySecret(accessKeySecret);
+                .setAccessKeySecret(DesUtil.desDecrypt(accessKeySecret, DesUtil.key));
         // 访问的域名
         config.endpoint = endpoint;
         return new com.aliyun.dysmsapi20170525.Client(config);
