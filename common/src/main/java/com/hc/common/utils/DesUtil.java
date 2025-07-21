@@ -47,20 +47,5 @@ public class DesUtil {
         return new String(cipher.doFinal(result));
     }
 
-    public static void main(String[] args) throws Exception {
-        //key要8位，不然会报错：java.security.InvalidKeyException: Wrong key size
-
-        //待加密数据 accessKeyId
-        String content = "LTAI5t9MgnM2d41JtTjo2xSK +yyl+delete";
-        //待加密数据 accessKeySecret
-//        String content = "A6alV5mXHa0MLydTTUq7GXPRlNiCcu +yyl+999";
-
-        //加密
-        String x = desEncrypt(content, key);
-        System.out.println(x);//qDhh3hjbd+/TESXcV0YxC4ArDlFR1Mor
-
-        //解密
-        System.out.println(desDecrypt(x, key));//对称加密算法
-    }
 }
 
