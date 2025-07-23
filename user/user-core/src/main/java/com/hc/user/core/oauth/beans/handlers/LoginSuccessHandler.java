@@ -7,6 +7,7 @@ import com.hc.user.core.properties.NacosHcUserConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -34,12 +35,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             throws IOException, ServletException {
 
         // 生成 token 返回前端
-        Object principal = authentication.getPrincipal();
+//        Object principal = authentication.getPrincipal();
+        UserDetails details = (UserDetails) authentication.getDetails();
         // accessToken 过期时间 30分钟
         Long accessTokenExpireSeconds = configProperties.getAuth().getAccessTokenExpireSeconds();
         // refreshToken 过期时间 6小时
         Long refreshTokenExpireSeconds = configProperties.getAuth().getRefreshTokenExpireSeconds();
-        String accessToken = jwtUtil.createToken(principal.toString(), accessTokenExpireSeconds);
+        String accessToken = jwtUtil.createToken(details.getUsername(), accessTokenExpireSeconds);
         String refreshToken = jwtUtil.createToken(accessToken, refreshTokenExpireSeconds);
 
         Map<String, String> tokenMap = new HashMap<>();

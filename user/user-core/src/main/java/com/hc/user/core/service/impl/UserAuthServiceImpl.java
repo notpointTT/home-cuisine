@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,13 +91,25 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    public boolean smsLogin(String phone, String code) {
+    public SimpleAuthUserInfo smsLogin(String phone, String code) {
         boolean available = verificationCodeHandler.codeAvailable(phone, code, LOGIN_CODE_TYPE);
         if (!available) {
             throw new SmsInvalidException();
         }
 
-        return true;
+        SimpleAuthUserInfo userInfo = userMapper.queryAuthUser(phone);
+
+        return userInfo;
+    }
+
+    @Override
+    public SimpleAuthUserInfo upLogin(String username, String password) {
+        return null;
+    }
+
+    @Override
+    public SimpleAuthUserInfo wxLogin(String code) {
+        return null;
     }
 
     @Override

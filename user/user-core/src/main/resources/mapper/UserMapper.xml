@@ -6,12 +6,12 @@
 <mapper namespace="com.hc.user.core.mapper.UserMapper">
     <select id="queryAuthUser" resultType="com.hc.user.core.model.auth.SimpleAuthUserInfo">
 
-        select * from user_info where phone_num = #{phoneNum}
+        select * from user where phone_num = #{phoneNum}
 
     </select>
 
     <insert id="insertUser">
-        insert into user_info (user_id, phone_num) values (#{userId}, #{phoneNum})
+        insert into user (user_id, phone_num) values (#{userId}, #{phoneNum})
     </insert>
 
 

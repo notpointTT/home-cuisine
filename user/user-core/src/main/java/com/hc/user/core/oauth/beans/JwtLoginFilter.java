@@ -51,7 +51,4 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         return getAuthenticationManager().authenticate(authentication);
     }
 
-
-
-
 }

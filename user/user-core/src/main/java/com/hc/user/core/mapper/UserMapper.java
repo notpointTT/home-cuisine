@@ -15,6 +15,4 @@ public interface UserMapper {
 
     void insertUser(@Param("userId") String userId, @Param("phoneNum") String phoneNum);
 
-
-
 }

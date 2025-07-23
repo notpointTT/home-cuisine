@@ -22,7 +22,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(sign)
                 .signWith(SignatureAlgorithm.HS256, CommonConstant.TokenConstant.SIGN_KEY)
-                .setExpiration(new Date(new Date().getTime() + 1000 * expireSeconds))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * expireSeconds))
                 .compact();
     }
 

@@ -1,13 +1,13 @@
 package com.hc.user.core.service;
 
-import com.hc.user.core.oauth.beans.provider.AbstractSmsLogin;
+import com.hc.user.core.oauth.beans.provider.AbstractLogin;
 
 /**
  * @author a1234
  * @description
  * @create 2024-04-25 16:05
  */
-public interface UserAuthService extends AbstractSmsLogin {
+public interface UserAuthService extends AbstractLogin {
 
     /**
      * 获取/发送手机验证码

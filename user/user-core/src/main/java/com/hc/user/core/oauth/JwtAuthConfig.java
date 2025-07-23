@@ -37,7 +37,7 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
                 .apply(loginConfig)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/auth/login", "/user/auth/refreshToken")
+                .antMatchers("/auth/login", "/auth/refreshToken")
                 .permitAll();
     }
 }

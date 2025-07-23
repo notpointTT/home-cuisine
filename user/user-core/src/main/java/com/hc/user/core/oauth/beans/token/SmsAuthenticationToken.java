@@ -27,4 +27,6 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
     public String getPrincipal() {
         return phone;
     }
+
+
 }
