@@ -4,6 +4,10 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 import java.util.ArrayList;
 
+/**
+ * 微信认证
+ * 20250721 - TODO
+ */
 public class WxAuthenticationToken extends AbstractAuthenticationToken {
 
     private final String code;

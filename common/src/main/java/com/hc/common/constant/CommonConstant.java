@@ -21,9 +21,22 @@ public final class CommonConstant {
     }
 
     public static final class LoginType {
-        public static final String PHONE_CODE = "SMS";
+        /**
+         * 手机短信
+         */
+        public static final String SMS = "SMS";
+        /**
+         * 微信
+         */
         public static final String WX = "WX";
-        public static final String USER_PASSWORD = "USER_PASSWORD";
+        /**
+         * 常规用户密码
+         */
+        public static final String UP = "UP";
+        /**
+         * 二维码
+         */
+        public static final String QR = "QR";
     }
 
 }

@@ -4,6 +4,9 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 import java.util.ArrayList;
 
+/**
+ * 短信认证模式
+ */
 public class SmsAuthenticationToken extends AbstractAuthenticationToken {
 
     private final String phone;

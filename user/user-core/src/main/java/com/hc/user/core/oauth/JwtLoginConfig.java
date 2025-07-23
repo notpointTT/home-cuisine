@@ -1,10 +1,9 @@
 package com.hc.user.core.oauth;
 
 import com.hc.user.core.oauth.beans.JwtLoginFilter;
+import com.hc.user.core.oauth.beans.JwtProviderManager;
 import com.hc.user.core.oauth.beans.handlers.LoginFailHandler;
 import com.hc.user.core.oauth.beans.handlers.LoginSuccessHandler;
-import com.hc.user.core.oauth.beans.provider.SmsAuthProvider;
-import com.hc.user.core.oauth.beans.provider.UsernamePasswordAuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,13 +23,13 @@ public class JwtLoginConfig extends SecurityConfigurerAdapter<DefaultSecurityFil
     @Autowired
     private LoginFailHandler failHandler;
 
-    @Autowired
-    private UsernamePasswordAuthProvider usernamePasswordAuthProvider;
-    @Autowired
-    private SmsAuthProvider smsAuthProvider;
+//    @Autowired
+//    private UsernamePasswordAuthProvider usernamePasswordAuthProvider;
+//    @Autowired
+//    private SmsAuthProvider smsAuthProvider;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private JwtProviderManager jwtProviderManager;
 
 
     /**
@@ -44,7 +43,7 @@ public class JwtLoginConfig extends SecurityConfigurerAdapter<DefaultSecurityFil
     public void configure(HttpSecurity http) {
         JwtLoginFilter filter = new JwtLoginFilter();
         // authenticationManager 中已经预设 hc系统内的 provider
-        filter.setAuthenticationManager(authenticationManager);
+        filter.setAuthenticationManager(jwtProviderManager);
         //认证成功处理器
         filter.setAuthenticationSuccessHandler(successHandler);
         //认证失败处理器

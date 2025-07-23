@@ -6,17 +6,21 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class HcLoginAuthToken extends AbstractAuthenticationToken {
+/**
+ * 用户密码认证
+ * UsernamePassword - UP
+ */
+public class UPLoginAuthToken extends AbstractAuthenticationToken {
 
     private String principal;
     private String credentials;
     private String loginType;
 
-    public HcLoginAuthToken(Collection<? extends GrantedAuthority> authorities) {
+    public UPLoginAuthToken(Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
     }
 
-    public HcLoginAuthToken(String principal, String credentials, String loginType) {
+    public UPLoginAuthToken(String principal, String credentials, String loginType) {
         super(new ArrayList<>());
         this.principal = principal;
         this.credentials = credentials;
