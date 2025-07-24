@@ -33,9 +33,11 @@ public class SmsConfig {
     public com.aliyun.dysmsapi20170525.Client createClient() throws Exception {
         com.aliyun.teaopenapi.models.Config config = new com.aliyun.teaopenapi.models.Config()
                 // 您的 AccessKey ID
-                .setAccessKeyId(DesUtil.desDecrypt(accessKeyId, DesUtil.key))
+//                .setAccessKeyId(DesUtil.desDecrypt(accessKeyId, DesUtil.key))
+                .setAccessKeyId(accessKeyId)
                 // 您的 AccessKey Secret
-                .setAccessKeySecret(DesUtil.desDecrypt(accessKeySecret, DesUtil.key));
+//                .setAccessKeySecret(DesUtil.desDecrypt(accessKeySecret, DesUtil.key));
+                .setAccessKeySecret(accessKeySecret);
         // 访问的域名
         config.endpoint = endpoint;
         return new com.aliyun.dysmsapi20170525.Client(config);

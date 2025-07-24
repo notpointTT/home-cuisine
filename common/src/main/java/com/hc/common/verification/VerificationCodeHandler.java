@@ -1,5 +1,6 @@
 package com.hc.common.verification;
 
+import com.hc.common.exceptions.BaseException;
 import com.hc.common.exceptions.VerificationCodeSendException;
 import com.hc.common.sms.SmsSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class VerificationCodeHandler {
      * 验证码过期时间
      * 秒
      */
-    private static final long CODE_TIME_OUT_SECOND = 60;
+    private static final long CODE_TIME_OUT_SECOND = 6000;
 
     private static final String CODE_REDIS_PREFIX = "V_CODE::";
 
@@ -37,8 +38,7 @@ public class VerificationCodeHandler {
         Boolean res = ops.setIfAbsent(codeKey, code, CODE_TIME_OUT_SECOND, TimeUnit.SECONDS);
         // 验证 是否缓存成功
         if (res == null || Boolean.FALSE.equals(res)) {
-//            throw new BaseException("请勿频繁发送");
-            return;
+            throw new BaseException("请勿频繁发送");
         }
 
         // 发送验证码

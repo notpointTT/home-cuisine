@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class SmsAuthProvider implements AuthenticationProvider {
 
     @Autowired
-    private AbstractLogin phoneCodeLogin;
+    private AbstractLogin abstractLogin;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -35,7 +35,7 @@ public class SmsAuthProvider implements AuthenticationProvider {
         String phone = token.getPrincipal();
         String code = token.getCredentials();
         try {
-            UserDetails userDetails = phoneCodeLogin.smsLogin(phone, code);
+            UserDetails userDetails = abstractLogin.smsLogin(phone, code);
             token.setDetails(userDetails);
         } catch (AuthenticationException authenticationException) {
             throw authenticationException;

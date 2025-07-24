@@ -43,6 +43,7 @@ public class SmsSender {
 //                throw new SmsException();
 //            }
         }catch (Exception e) {
+            log.error("短信发送异常", e);
             throw new SmsException();
         }
 
