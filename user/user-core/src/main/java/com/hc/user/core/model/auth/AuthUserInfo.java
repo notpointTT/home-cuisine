@@ -1,13 +1,14 @@
 package com.hc.user.core.model.auth;
 
-import com.hc.common.auth.AuthUserInfo;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class SimpleAuthUserInfo implements UserDetails {
+public class AuthUserInfo implements UserDetails {
 
     private String phoneNum;
     private String username;
@@ -28,6 +29,11 @@ public class SimpleAuthUserInfo implements UserDetails {
 
     @Override
     public List<? extends GrantedAuthority> getAuthorities() {
+        if (roles != null) {
+            return roles.stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                    .collect(Collectors.toList());
+        }
         return Collections.emptyList();
     }
 
@@ -59,5 +65,13 @@ public class SimpleAuthUserInfo implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }

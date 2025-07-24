@@ -3,6 +3,8 @@ package com.hc.user.core.oauth.beans.handlers;
 import com.alibaba.fastjson.JSON;
 import com.hc.common.model.ApiResult;
 import com.hc.common.utils.JwtUtil;
+import com.hc.user.core.model.auth.AuthUserInfo;
+import com.hc.user.core.oauth.UserTokenCache;
 import com.hc.user.core.properties.NacosHcUserConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,7 +25,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     private JwtUtil jwtUtil;
-
+    @Autowired
+    private UserTokenCache userTokenCache;
     @Autowired
     private NacosHcUserConfigProperties configProperties;
     
@@ -43,6 +46,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         Long refreshTokenExpireSeconds = configProperties.getAuth().getRefreshTokenExpireSeconds();
         String accessToken = jwtUtil.createToken(details.getUsername(), accessTokenExpireSeconds);
         String refreshToken = jwtUtil.createToken(accessToken, refreshTokenExpireSeconds);
+
+        // 设置 TokenCache 也就是当前登录人信息
+        userTokenCache.setToken(accessToken, (AuthUserInfo) details);
 
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("accessToken", accessToken);

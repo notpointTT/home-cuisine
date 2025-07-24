@@ -19,9 +19,6 @@ public class SmsAuthProvider implements AuthenticationProvider {
     @Autowired
     private AbstractLogin abstractLogin;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
     /**
      * 验证手机验证码登录认证
      *

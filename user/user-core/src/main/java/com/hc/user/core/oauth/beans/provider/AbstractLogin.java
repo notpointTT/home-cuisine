@@ -1,7 +1,6 @@
 package com.hc.user.core.oauth.beans.provider;
 
-import com.hc.user.core.model.auth.SimpleAuthUserInfo;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.hc.user.core.model.auth.AuthUserInfo;
 
 public interface AbstractLogin {
 
@@ -11,7 +10,7 @@ public interface AbstractLogin {
      * @param code
      * @return
      */
-    SimpleAuthUserInfo smsLogin(String phone, String code);
+    AuthUserInfo smsLogin(String phone, String code);
 
     /**
      * 用户名密码登录
@@ -19,13 +18,13 @@ public interface AbstractLogin {
      * @param password
      * @return
      */
-    SimpleAuthUserInfo upLogin(String username, String password);
+    AuthUserInfo upLogin(String username, String password);
 
     /**
      * 微信直接登录
      * @param code
      * @return
      */
-    SimpleAuthUserInfo wxLogin(String code);
+    AuthUserInfo wxLogin(String code);
 
 }
