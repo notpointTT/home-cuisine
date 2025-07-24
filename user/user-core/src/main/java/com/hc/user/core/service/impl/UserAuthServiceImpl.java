@@ -1,11 +1,10 @@
 package com.hc.user.core.service.impl;
 
-import com.hc.common.auth.AuthUserInfo;
-import com.hc.common.auth.UserTokenCache;
+import com.hc.user.core.oauth.UserTokenCache;
 import com.hc.common.sms.SmsSender;
 import com.hc.common.verification.VerificationCodeHandler;
 import com.hc.user.core.mapper.UserMapper;
-import com.hc.user.core.model.auth.SimpleAuthUserInfo;
+import com.hc.user.core.model.auth.AuthUserInfo;
 import com.hc.common.utils.UUIDUtil;
 import com.hc.user.core.oauth.exceptions.SmsInvalidException;
 import com.hc.user.core.service.UserAuthService;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +59,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public String registerAndLogin(String phoneNum, String smsCode) {
 
         // 用户信息注册
-        SimpleAuthUserInfo userInfo = userMapper.queryAuthUser(phoneNum);
+        AuthUserInfo userInfo = userMapper.queryAuthUser(phoneNum);
         if (userInfo == null) {
             registerUser(phoneNum);
         }
@@ -91,24 +89,24 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    public SimpleAuthUserInfo smsLogin(String phone, String code) {
+    public AuthUserInfo smsLogin(String phone, String code) {
         boolean available = verificationCodeHandler.codeAvailable(phone, code, LOGIN_CODE_TYPE);
         if (!available) {
             throw new SmsInvalidException();
         }
 
-        SimpleAuthUserInfo userInfo = userMapper.queryAuthUser(phone);
+        AuthUserInfo userInfo = userMapper.queryAuthUser(phone);
 
         return userInfo;
     }
 
     @Override
-    public SimpleAuthUserInfo upLogin(String username, String password) {
+    public AuthUserInfo upLogin(String username, String password) {
         return null;
     }
 
     @Override
-    public SimpleAuthUserInfo wxLogin(String code) {
+    public AuthUserInfo wxLogin(String code) {
         return null;
     }
 

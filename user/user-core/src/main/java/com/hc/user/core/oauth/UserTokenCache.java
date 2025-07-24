@@ -1,9 +1,11 @@
-package com.hc.common.auth;
+package com.hc.user.core.oauth;
 
 import com.alibaba.fastjson.JSON;
 import com.hc.common.constant.CommonConstant;
 import com.hc.common.exceptions.BaseException;
 import com.hc.common.exceptions.UserNotLoginException;
+import com.hc.common.utils.SecurityUtil;
+import com.hc.user.core.model.auth.AuthUserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -40,11 +41,6 @@ public class UserTokenCache {
         ops.set(key, userInfoJson, TOKEN_TIME_OUT_SECOND, TimeUnit.SECONDS);
     }
 
-    public AuthUserInfo currentUser() {
-        String currentToken = currentToken();
-        return tokenUser(currentToken);
-    }
-
     /**
      * 获取 token 对应的用户信息
      * 每次调用此方法获取信息，都会将token有效期延长 TOKEN_TIME_OUT_SECOND 秒
@@ -60,19 +56,6 @@ public class UserTokenCache {
         AuthUserInfo authUserInfo = JSON.parseObject(userJson, AuthUserInfo.class);
         setToken(token, userJson);
         return authUserInfo;
-    }
-
-    public String currentToken() {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes == null) {
-            throw new BaseException("请求信息获取异常");
-        }
-        HttpServletRequest request = attributes.getRequest();
-        String token = request.getHeader(CommonConstant.TOKEN_HEADER_NAME);
-        if (StringUtils.isEmpty(token)) {
-            throw new UserNotLoginException();
-        }
-        return token;
     }
 
 }
