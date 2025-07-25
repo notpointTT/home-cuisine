@@ -10,17 +10,17 @@ import java.util.Collection;
  * 用户密码认证
  * UsernamePassword - UP
  */
-public class UPLoginAuthToken extends AbstractAuthenticationToken {
+public class UserPasswordLoginAuthToken extends AbstractAuthenticationToken {
 
     private String principal;
     private String credentials;
     private String loginType;
 
-    public UPLoginAuthToken(Collection<? extends GrantedAuthority> authorities) {
+    public UserPasswordLoginAuthToken(Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
     }
 
-    public UPLoginAuthToken(String principal, String credentials, String loginType) {
+    public UserPasswordLoginAuthToken(String principal, String credentials, String loginType) {
         super(new ArrayList<>());
         this.principal = principal;
         this.credentials = credentials;

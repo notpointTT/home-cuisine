@@ -18,7 +18,7 @@ public interface AbstractLogin {
      * @param password
      * @return
      */
-    AuthUserInfo upLogin(String username, String password);
+    AuthUserInfo userPasswordLogin(String username, String password);
 
     /**
      * 微信直接登录

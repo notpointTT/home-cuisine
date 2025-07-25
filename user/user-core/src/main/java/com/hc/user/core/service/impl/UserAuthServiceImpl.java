@@ -101,7 +101,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    public AuthUserInfo upLogin(String username, String password) {
+    public AuthUserInfo userPasswordLogin(String username, String password) {
         return null;
     }
 
