@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/info")
-@IgnoreAuth
+//@IgnoreAuth
 public class UserInfoController {
 
     @GetMapping("/base")

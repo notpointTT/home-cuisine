@@ -4,7 +4,10 @@ import com.hc.common.annotation.IgnoreAuth;
 import com.hc.common.model.ApiResult;
 import com.hc.user.core.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.PermitAll;
 
 /**
  * @author a1234
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/auth")
-@IgnoreAuth
 public class UserAuthController {
 
     @Autowired

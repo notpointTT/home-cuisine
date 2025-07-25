@@ -37,8 +37,7 @@ public class UserTokenCache {
 
     private void setToken(String token, String userInfoJson) {
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        String key = TOKEN_REDIS_PREFIX + token;
-        ops.set(key, userInfoJson, TOKEN_TIME_OUT_SECOND, TimeUnit.SECONDS);
+        ops.set(getTokenKey(token), userInfoJson, TOKEN_TIME_OUT_SECOND, TimeUnit.SECONDS);
     }
 
     /**
@@ -49,13 +48,17 @@ public class UserTokenCache {
      */
     public AuthUserInfo tokenUser(String token) {
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        String userJson = ops.get(token);
+        String userJson = ops.get(getTokenKey(token));
         if (StringUtils.isEmpty(userJson)) {
             throw new UserNotLoginException();
         }
         AuthUserInfo authUserInfo = JSON.parseObject(userJson, AuthUserInfo.class);
         setToken(token, userJson);
         return authUserInfo;
+    }
+
+    String getTokenKey(String token) {
+        return TOKEN_REDIS_PREFIX + token;
     }
 
 }
