@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.hc.common.model.ApiResult;
 import com.hc.common.utils.JwtUtil;
 import com.hc.user.core.model.auth.AuthUserInfo;
-import com.hc.user.core.oauth.UserTokenCache;
+import com.hc.user.core.oauth.UserAuthCache;
 import com.hc.user.core.properties.NacosHcUserConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,13 +25,20 @@ import java.util.Map;
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
+    /**
+     * accessToken 过期时间 30分钟
+     */
+    private static final long ACCESS_TOKEN_TIME_OUT_SECOND = 30 * 60;
+    /**
+     * refreshToken 过期时间 12小时
+     */
+    private static final long REFRESH_TOKEN_TIME_OUT_SECOND = 12 * 60 * 60;
+
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserTokenCache userTokenCache;
-    @Autowired
-    private NacosHcUserConfigProperties configProperties;
-    
+    private UserAuthCache userAuthCache;
+
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
@@ -38,17 +47,14 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             throws IOException, ServletException {
 
         // 生成 token 返回前端
-//        Object principal = authentication.getPrincipal();
-        UserDetails details = (UserDetails) authentication.getDetails();
-        // accessToken 过期时间 30分钟
-        Long accessTokenExpireSeconds = configProperties.getAuth().getAccessTokenExpireSeconds();
-        // refreshToken 过期时间 6小时
-        Long refreshTokenExpireSeconds = configProperties.getAuth().getRefreshTokenExpireSeconds();
-        String accessToken = jwtUtil.createToken(details.getUsername(), accessTokenExpireSeconds);
-        String refreshToken = jwtUtil.createToken(accessToken, refreshTokenExpireSeconds);
+        AuthUserInfo details = (AuthUserInfo) authentication.getDetails();
+        String username = details.getUsername();
 
-        // 设置 TokenCache 也就是当前登录人信息
-        userTokenCache.setToken(accessToken, (AuthUserInfo) details);
+        String accessToken = jwtUtil.createToken(username, ACCESS_TOKEN_TIME_OUT_SECOND);
+        String refreshToken = jwtUtil.createToken(username, REFRESH_TOKEN_TIME_OUT_SECOND);
+
+        // 设置 UserAuth 也就是当前登录人信息
+        userAuthCache.setUserAuth(username, details);
 
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("accessToken", accessToken);

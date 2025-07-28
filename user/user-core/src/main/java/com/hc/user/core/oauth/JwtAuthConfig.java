@@ -1,11 +1,16 @@
 package com.hc.user.core.oauth;
 
 import com.hc.user.core.oauth.beans.JwtAuthFilter;
+import com.hc.user.core.oauth.beans.RoleAccessDecisionVoter;
 import com.hc.user.core.oauth.beans.handlers.CustomAccessDeniedHandler;
 import com.hc.user.core.oauth.beans.handlers.NeedLoginHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,9 +19,11 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -41,6 +48,8 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
     private NeedLoginHandler needLoginHandler;
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
+    @Autowired
+    private RoleAccessDecisionVoter roleAccessDecisionVoter;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -74,5 +83,21 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(needLoginHandler)
                 // 无权限处理
                 .accessDeniedHandler(customAccessDeniedHandler);
+    }
+
+
+    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        // 组合默认投票器和自定义投票器
+        List<AccessDecisionVoter<?>> voters = Arrays.asList(
+                // 自定义动态角色投票器
+                roleAccessDecisionVoter,
+                // 保留SpEL表达式支持
+                new WebExpressionVoter(),
+                // 支持IS_AUTHENTICATED_*
+                new AuthenticatedVoter()
+        );
+        // 一票通过即可放行
+        return new AffirmativeBased(voters);
     }
 }

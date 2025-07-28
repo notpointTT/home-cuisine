@@ -8,36 +8,26 @@ import java.util.Collection;
 
 /**
  * 用户密码认证
- * UsernamePassword - UP
+ * UsernamePassword - USER_PASSWORD
  */
 public class UserPasswordLoginAuthToken extends AbstractAuthenticationToken {
 
-    private String principal;
-    private String credentials;
-    private String loginType;
+    private String username;
+    private String password;
 
-    public UserPasswordLoginAuthToken(Collection<? extends GrantedAuthority> authorities) {
-        super(authorities);
-    }
-
-    public UserPasswordLoginAuthToken(String principal, String credentials, String loginType) {
+    public UserPasswordLoginAuthToken(String username, String password) {
         super(new ArrayList<>());
-        this.principal = principal;
-        this.credentials = credentials;
-        this.loginType = loginType;
+        this.username = username;
+        this.password = password;
     }
 
     @Override
     public Object getCredentials() {
-        return credentials;
+        return password;
     }
 
     @Override
     public Object getPrincipal() {
-        return principal;
-    }
-
-    public String getLoginType() {
-        return loginType;
+        return username;
     }
 }

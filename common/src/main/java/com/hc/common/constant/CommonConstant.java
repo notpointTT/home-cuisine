@@ -32,7 +32,7 @@ public final class CommonConstant {
         /**
          * 常规用户密码
          */
-        public static final String UP = "UP";
+        public static final String USER_PASSWORD = "USER_PASSWORD";
         /**
          * 二维码
          */

@@ -2,13 +2,11 @@ package com.hc.user.core.oauth.beans;
 
 import com.hc.common.exceptions.UserNotLoginException;
 import com.hc.user.core.model.auth.AuthUserInfo;
-import com.hc.user.core.oauth.UserTokenCache;
+import com.hc.user.core.oauth.UserAuthCache;
 import com.hc.common.utils.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -19,8 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 /**
  * @author a1234
@@ -31,14 +28,12 @@ import java.util.stream.Collectors;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private JwtUtil jwtUtil;
-    private UserTokenCache userTokenCache;
+    private UserAuthCache userAuthCache;
 
-    public JwtAuthFilter(JwtUtil jwtUtil, UserTokenCache userTokenCache) {
+    public JwtAuthFilter(JwtUtil jwtUtil, UserAuthCache userAuthCache) {
         this.jwtUtil = jwtUtil;
-        this.userTokenCache = userTokenCache;
+        this.userAuthCache = userAuthCache;
     }
-
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -89,14 +84,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      * 从缓存中获取用户权限信息
      */
     private UserDetails getTokenUser(String token) {
+        String username = jwtUtil.parseToken(token);
         // 从缓存中获取
-        AuthUserInfo authUserInfo = userTokenCache.tokenUser(token);
-        if (authUserInfo == null) {
-            throw new UserNotLoginException();
-        }
+//        AuthUserInfo authUserInfo = userAuthCache.getUserAuth(username);
+//        if (authUserInfo == null) {
+//            throw new UserNotLoginException();
+//        }
+        // 直接返回简单 AuthUserInfo
+        AuthUserInfo authUserInfo = new AuthUserInfo();
+        authUserInfo.setUsername(username);
+        authUserInfo.setRoles(Collections.emptyList());
 
         return authUserInfo;
     }
-
-
 }

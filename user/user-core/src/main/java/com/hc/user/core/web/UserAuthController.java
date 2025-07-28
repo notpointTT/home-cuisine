@@ -27,14 +27,9 @@ public class UserAuthController {
         return ApiResult.success("验证码发送成功");
     }
 
-    @PostMapping("/registerAndLogin")
+    @PostMapping("/register")
     public ApiResult<?> registerAndLogin(@RequestParam("phone") String phoneNum, @RequestParam("smsCode") String smsCode) {
         return ApiResult.success(userAuthService.registerAndLogin(phoneNum, smsCode));
-    }
-
-    @PostMapping("/login")
-    public ApiResult<?> login(@RequestParam("phone") String phoneNum, @RequestParam("smsCode") String smsCode) {
-        return ApiResult.success(userAuthService.login(phoneNum, smsCode));
     }
 
 

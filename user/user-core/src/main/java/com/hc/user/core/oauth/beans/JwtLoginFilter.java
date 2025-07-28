@@ -2,6 +2,7 @@ package com.hc.user.core.oauth.beans;
 
 import com.hc.common.constant.CommonConstant;
 import com.hc.user.core.oauth.beans.token.SmsAuthenticationToken;
+import com.hc.user.core.oauth.beans.token.UserPasswordLoginAuthToken;
 import com.hc.user.core.oauth.beans.token.WxAuthenticationToken;
 import com.hc.user.core.oauth.exceptions.UnsupportedLoginTypeException;
 import org.springframework.security.core.Authentication;
@@ -43,6 +44,12 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         if (CommonConstant.LoginType.WX.equals(loginType)) {
             String code = request.getParameter("code");
             authentication = new WxAuthenticationToken(code);
+        }
+        // 用户名密码登录
+        if (CommonConstant.LoginType.USER_PASSWORD.equals(loginType)) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            authentication = new UserPasswordLoginAuthToken(username, password);
         }
 
         if (authentication == null) {
