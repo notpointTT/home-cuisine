@@ -9,8 +9,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice;
+import org.springframework.security.access.prepost.PreInvocationAuthorizationAdvice;
+import org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -48,8 +53,8 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
     private NeedLoginHandler needLoginHandler;
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
-    @Autowired
-    private RoleAccessDecisionVoter roleAccessDecisionVoter;
+//    @Autowired
+//    private RoleAccessDecisionVoter roleAccessDecisionVoter;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -82,22 +87,9 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
                 // 未登录处理
                 .authenticationEntryPoint(needLoginHandler)
                 // 无权限处理
+                // 项目中有 @ControllerAdvice 或 @ExceptionHandler 捕获了 AccessDeniedException，它会覆盖 Spring Security 的默认行为
                 .accessDeniedHandler(customAccessDeniedHandler);
     }
 
 
-    @Bean
-    public AccessDecisionManager accessDecisionManager() {
-        // 组合默认投票器和自定义投票器
-        List<AccessDecisionVoter<?>> voters = Arrays.asList(
-                // 自定义动态角色投票器
-                roleAccessDecisionVoter,
-                // 保留SpEL表达式支持
-                new WebExpressionVoter(),
-                // 支持IS_AUTHENTICATED_*
-                new AuthenticatedVoter()
-        );
-        // 一票通过即可放行
-        return new AffirmativeBased(voters);
-    }
 }

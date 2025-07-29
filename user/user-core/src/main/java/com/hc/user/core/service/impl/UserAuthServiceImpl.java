@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -67,8 +68,8 @@ public class UserAuthServiceImpl implements UserAuthService {
     public String register(String phoneNum, String smsCode) {
 
         // 用户信息注册
-        AuthUserInfo userInfo = userMapper.queryAuthUser(phoneNum);
-        if (userInfo == null) {
+        UserEntity userEntity = userMapper.queryByPhoneNum(phoneNum);
+        if (userEntity == null) {
             registerUser(phoneNum);
         }
 
@@ -109,7 +110,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     List<String> userRoles(long userId) {
         // todo 根据用户id，返回用户角色清单
-        return Collections.EMPTY_LIST;
+        return Arrays.asList("USER");
     }
 
     AuthUserInfo user2Auth(UserEntity userEntity) {

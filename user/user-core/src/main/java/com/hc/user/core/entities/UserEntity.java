@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author a1234
@@ -28,7 +29,7 @@ public class UserEntity {
 
     private Boolean mobileVerified = false;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Date createdAt;
 
 
 }

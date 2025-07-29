@@ -28,8 +28,8 @@ public class UserAuthController {
     }
 
     @PostMapping("/register")
-    public ApiResult<?> registerAndLogin(@RequestParam("phone") String phoneNum, @RequestParam("smsCode") String smsCode) {
-        return ApiResult.success(userAuthService.registerAndLogin(phoneNum, smsCode));
+    public ApiResult<?> register(@RequestParam("phone") String phoneNum, @RequestParam("smsCode") String smsCode) {
+        return ApiResult.success(userAuthService.register(phoneNum, smsCode));
     }
 
 

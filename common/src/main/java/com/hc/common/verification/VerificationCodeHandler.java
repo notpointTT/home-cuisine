@@ -42,9 +42,14 @@ public class VerificationCodeHandler {
         }
 
         // 发送验证码
-        String verificationCode = sendCode0(phoneNum, code, type);
-        if (!code.equals(verificationCode)) {
-            // 验证码发送异常，清理本次所缓存验证码
+        try {
+            String verificationCode = sendCode0(phoneNum, code, type);
+            if (!code.equals(verificationCode)) {
+                // 验证码发送异常，清理本次所缓存验证码
+                redisTemplate.delete(codeKey);
+                throw new VerificationCodeSendException();
+            }
+        }catch (Exception e) {
             redisTemplate.delete(codeKey);
             throw new VerificationCodeSendException();
         }

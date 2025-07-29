@@ -4,8 +4,11 @@ import com.hc.common.exceptions.UserNotLoginException;
 import com.hc.user.core.model.auth.AuthUserInfo;
 import com.hc.user.core.oauth.UserAuthCache;
 import com.hc.common.utils.JwtUtil;
+import com.hc.user.core.oauth.beans.token.CacheableUserAuthenticationToken;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -17,7 +20,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author a1234
@@ -65,19 +72,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      * @return 已认证的Authentication对象
      */
     public Authentication buildAuthentication(String token) {
-        // 1. 从JWT中提取用户名
-        String username = jwtUtil.parseToken(token);
 
-        // 2. 加载用户信息
         // 从JWT自定义声明中直接读取权限（推荐无状态方案）
         UserDetails userDetails = getTokenUser(token);
 
-        return new UsernamePasswordAuthenticationToken(
-                userDetails.getUsername(),
-                // credentials置空
-                null,
-                userDetails.getAuthorities()
-        );
+        return new CacheableUserAuthenticationToken(userDetails, userAuthCache);
     }
 
     /**
@@ -85,11 +84,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      */
     private UserDetails getTokenUser(String token) {
         String username = jwtUtil.parseToken(token);
-        // 从缓存中获取
-//        AuthUserInfo authUserInfo = userAuthCache.getUserAuth(username);
-//        if (authUserInfo == null) {
-//            throw new UserNotLoginException();
-//        }
         // 直接返回简单 AuthUserInfo
         AuthUserInfo authUserInfo = new AuthUserInfo();
         authUserInfo.setUsername(username);

@@ -6,10 +6,14 @@ import io.lettuce.core.dynamic.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,42 +22,50 @@ import java.util.List;
  * @description
  * @create 2025-07-28 17:52
  */
-@Component
-public class RoleAccessDecisionVoter implements AccessDecisionVoter<Object> {
+//@Component
+@Deprecated
+public class RoleAccessDecisionVoter extends RoleVoter {
 
     @Autowired
     private UserAuthCache userAuthCache;
 
     @Override
-    public boolean supports(ConfigAttribute attribute) {
-        // 只处理角色校验
-        return attribute.getAttribute().startsWith("ROLE_");
-    }
-
-    @Override
     public boolean supports(Class<?> clazz) {
-
-        return  // FilterInvocation：Web 请求（URL 访问）
-                FilterInvocation.class.isAssignableFrom(clazz) ||
-                // MethodInvocation：方法调用（@PreAuthorize）
-                MethodInvocation.class.isAssignableFrom(clazz);
+        return true;
     }
 
     @Override
-    public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> requiredRoles) {
+    public int vote(Authentication authentication, Object invocation, Collection<ConfigAttribute> attributes) {
+
+        if (authentication == null || authentication.getPrincipal() == null) {
+            return ACCESS_DENIED;
+        }
+
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            return ACCESS_DENIED;
+        }
         // 获取用户名
         String username = authentication.getPrincipal().toString();
         // 从 缓存中 获取用户实际角色
         AuthUserInfo userAuth = userAuthCache.getUserAuth(username);
-        List<String> roles = userAuth.getRoles();
+//        List<String> roles = userAuth.getRoles();
+        List<String> roles = Arrays.asList("ADMIN");
 
-        // 2. 检查是否匹配所需角色
-        for (ConfigAttribute requiredRole : requiredRoles) {
-            if (roles.contains(requiredRole.getAttribute())) {
-                // 匹配则放行
-                return ACCESS_GRANTED;
+        int result = ACCESS_ABSTAIN;
+
+        for (ConfigAttribute attribute : attributes) {
+            if (this.supports(attribute)) {
+                result = ACCESS_DENIED;
+
+                // Attempt to find a matching granted authority
+                for (String role : roles) {
+                    if (role.equals(attribute.getAttribute())) {
+                        return ACCESS_GRANTED;
+                    }
+                }
             }
         }
-        return ACCESS_DENIED;
+
+        return result;
     }
 }
