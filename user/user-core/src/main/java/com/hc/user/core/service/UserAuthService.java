@@ -1,6 +1,6 @@
 package com.hc.user.core.service;
 
-import com.hc.user.core.oauth.beans.provider.AbstractLogin;
+import com.hc.user.core.auth.provider.AbstractLogin;
 
 /**
  * @author a1234

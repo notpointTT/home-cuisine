@@ -9,8 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.hc.user</groupId>
-    <artifactId>user-core</artifactId>
+    <artifactId>user-auth</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -25,35 +24,17 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!--spring security的依赖-->
         <dependency>
-            <groupId>com.hc</groupId>
-            <artifactId>user-auth</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!--OAuth2的依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
     </dependencies>
-
-    <build>
-        <!-- 扫描项目下所有的文件 -->
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
-
-    <packaging>jar</packaging>
 
 </project>

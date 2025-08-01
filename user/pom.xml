@@ -15,6 +15,7 @@
         <module>user-core</module>
         <module>user-client</module>
         <module>user-starter</module>
+        <module>user-auth</module>
     </modules>
 
     <properties>

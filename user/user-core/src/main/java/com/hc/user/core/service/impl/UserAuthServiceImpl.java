@@ -1,27 +1,24 @@
 package com.hc.user.core.service.impl;
 
 import com.hc.common.utils.DesUtil;
+import com.hc.user.auth.model.AuthUserInfo;
 import com.hc.user.core.entities.UserEntity;
-import com.hc.user.core.oauth.UserAuthCache;
 import com.hc.common.sms.SmsSender;
 import com.hc.common.verification.VerificationCodeHandler;
 import com.hc.user.core.mapper.UserMapper;
-import com.hc.user.core.model.auth.AuthUserInfo;
 import com.hc.common.utils.UUIDUtil;
-import com.hc.user.core.oauth.exceptions.LoginFailException;
-import com.hc.user.core.oauth.exceptions.SmsInvalidException;
+import com.hc.user.auth.exceptions.LoginFailException;
+import com.hc.user.auth.exceptions.SmsInvalidException;
 import com.hc.user.core.service.UserAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,8 +38,6 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @Autowired
-    private UserAuthCache userAuthCache;
     @Autowired
     private VerificationCodeHandler verificationCodeHandler;
     @Autowired
