@@ -22,6 +22,13 @@ public class UserInfoController {
         return ApiResult.success(map);
     }
 
+    @GetMapping("/base/admin2")
+    public ApiResult<?> baseAdminInfo2() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("nickname", "ADMIN");
+        return ApiResult.success(map);
+    }
+
     @GetMapping("/base/user")
     @PreAuthorize("hasRole('USER')")
     public ApiResult<?> baseUserInfo() {

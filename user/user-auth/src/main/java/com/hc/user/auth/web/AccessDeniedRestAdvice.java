@@ -1,20 +1,27 @@
 package com.hc.user.auth.web;
 
 import com.hc.common.model.ApiResult;
+import com.hc.user.auth.beans.handlers.CustomAccessDeniedHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestControllerAdvice
 public class AccessDeniedRestAdvice {
 
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+
     @ExceptionHandler(AccessDeniedException.class)
-    public ApiResult<?> handleException(Exception e, HttpServletResponse response) {
-        response.setStatus(HttpStatus.FORBIDDEN.value());
-        return ApiResult.error("无权限访问");
+    public void handleException(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws Exception {
+        accessDeniedHandler.handle(request, response, e);
     }
 
 }
