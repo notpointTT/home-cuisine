@@ -1,7 +1,6 @@
 package com.hc.commons.security.web;
 
-import com.hc.common.model.ApiResult;
-import com.hc.user.auth.beans.handlers.CustomAccessDeniedHandler;
+import com.hc.commons.security.beans.handlers.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.hc.commons.dto.response.ApiResult;
 import org.springframework.http.HttpStatus;
