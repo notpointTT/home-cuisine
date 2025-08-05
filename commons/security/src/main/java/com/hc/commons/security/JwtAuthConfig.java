@@ -59,6 +59,7 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 过滤登录等需要放开的请求
                 .antMatchers("/auth/**", "/open/**").permitAll()
+                .antMatchers("/info/base/admin2").hasRole("ADMIN")
                 // 其余请求需要登录
                 .anyRequest().authenticated()
                 .and()
@@ -68,7 +69,6 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
                 // 未登录处理
                 .authenticationEntryPoint(needLoginHandler)
                 // 无权限处理
-                // 项目中有 @ControllerAdvice 或 @ExceptionHandler 捕获了 AccessDeniedException，它会覆盖 Spring Security 的默认行为
                 .accessDeniedHandler(customAccessDeniedHandler);
 
         // 应用登录配置
