@@ -11,14 +11,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>common</module>
-        <module>waiter</module>
-        <module>user</module>
-        <module>gateway</module>
-        <module>merchant</module>
-        <module>menu</module>
-        <module>order</module>
-        <module>evaluate</module>
+        <module>commons</module>
+        <module>infra</module>
+        <module>business</module>
+        <module>auth</module>
+        <module>external</module>
     </modules>
 
     <!--统一管理jar包版本-->
@@ -135,5 +132,16 @@
 
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
