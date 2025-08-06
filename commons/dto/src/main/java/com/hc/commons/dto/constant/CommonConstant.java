@@ -15,7 +15,7 @@ public final class CommonConstant {
     public static final int SMS_CODE_LENGTH = 6;
 
     public static final class Headers {
-        public static final String TOKEN_HEADER = "Authority";
+        public static final String TOKEN_HEADER = "Authorization";
         public static final String X_USER_ID_HEADER = "X_User_Id";
         public static final String X_USER_ROLES_HEADER = "X-User-Roles";
         public static final String X_REQUEST_FROM_HEADER = "X_Request_From";

@@ -1,4 +1,4 @@
-package com.hc.gateway;
+package com.hc.business.order;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,11 +6,12 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class GatewayStarter {
+public class OrderStarter {
+
     public static void main(String[] args) {
         System.setProperty("nacos.logging.default.config.enabled","false");
-        System.setProperty("csp.sentinel.app.type", "1");
-        SpringApplication.run(GatewayStarter.class, args);
+        SpringApplication.run(OrderStarter.class, args);
         System.out.println("run success");
     }
+
 }

@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.hc.commons.dto.emums.ApiResultCode;
 import com.hc.commons.dto.response.ApiResult;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,21 +24,25 @@ import javax.servlet.http.HttpServletResponse;
 @ConditionalOnClass(WebMvcConfigurer.class)
 public class SentinelExceptionHandler implements BlockExceptionHandler {
     @Override
-    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, BlockException e) throws Exception {
+    public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws Exception {
 
         ApiResultCode code = ApiResultCode.ERROR;
         if (e instanceof FlowException) {
             code = ApiResultCode.SENTINEL_FLOW_LIMITED;
+            response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         } else if (e instanceof ParamFlowException) {
             code = ApiResultCode.SENTINEL_HOT_LIMITED;
+            response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         } else if (e instanceof DegradeException) {
             code = ApiResultCode.SENTINEL_DEGRADE_LIMITED;
+            response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         } else if (e instanceof AuthorityException) {
             code = ApiResultCode.ACCESS_DENIED;
+            response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
         }
 
-        httpServletResponse.setContentType("application/json;charset=utf-8");
-        httpServletResponse.getWriter().write(JSON.toJSONString(ApiResult.result(code, null)));
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JSON.toJSONString(ApiResult.result(code, null)));
 
     }
 }

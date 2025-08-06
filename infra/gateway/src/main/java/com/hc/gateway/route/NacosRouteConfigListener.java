@@ -17,7 +17,7 @@ public class NacosRouteConfigListener {
 
     @Value("${spring.cloud.nacos.server-addr}")
     private String serverAddr;
-    @Value("${spring.cloud.nacos.config.namespace:public}")
+    @Value("${spring.cloud.nacos.config.namespace:}")
     private String namespace;
     @Value("${spring.cloud.nacos.config.group:DEFAULT_GROUP}")
     private String group;

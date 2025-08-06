@@ -1,9 +1,12 @@
 server:
-  port: 8090
+  port: 8083
+  servlet:
+    context-path: /order
 
 spring:
   application:
-    name: hc-gateway
+    name: hc-order
+
   servlet:
     multipart:
       max-file-size: 20MB #设置单个文件最大长度
@@ -25,6 +28,3 @@ spring:
             groupId: DEFAULT_GROUP
             dataType: json
             ruleType: flow
-
-logging:
-  config: classpath:config/logback-spring.xml
