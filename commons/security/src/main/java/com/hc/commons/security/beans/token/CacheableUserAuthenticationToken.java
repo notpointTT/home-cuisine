@@ -14,20 +14,20 @@ import java.util.stream.Collectors;
 public class CacheableUserAuthenticationToken extends AbstractAuthenticationToken {
 
     private final UserAuthCache userAuthCache;
-    private final UserDetails userDetails;
+    private final AuthUserInfo jwtUserInfo;
 
     /**
      * 缓存的 authorities 集合
      */
     private List<GrantedAuthority> cachedAuthorities;
 
-    public CacheableUserAuthenticationToken(UserDetails userDetails, UserAuthCache userAuthCache) {
+    public CacheableUserAuthenticationToken(AuthUserInfo jwtUserInfo, UserAuthCache userAuthCache) {
         // 初始化一个空的权限集合
         super(Collections.emptyList());
         // 默认是已经认证过的 token，如果这一步设为 false 责会标记当前 token 为 未认证
         setAuthenticated(true);
         this.userAuthCache = userAuthCache;
-        this.userDetails = userDetails;
+        this.jwtUserInfo = jwtUserInfo;
     }
 
     /**
@@ -37,19 +37,14 @@ public class CacheableUserAuthenticationToken extends AbstractAuthenticationToke
      */
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = jwtUserInfo.getAuthorities();
+        if (authorities != null) {
+            return authorities;
+        }
         if (cachedAuthorities == null || cachedAuthorities.isEmpty()) {
-            AuthUserInfo userAuth = userAuthCache.getUserAuth(userDetails.getUsername());
-            if (userAuth != null && userAuth.getRoles() != null) {
-                cachedAuthorities = userAuth.getRoles().stream().map(
-                        r -> {
-                            return new GrantedAuthority() {
-                                @Override
-                                public String getAuthority() {
-                                    return "ROLE_" + r;
-                                }
-                            };
-                        }
-                ).collect(Collectors.toList());
+            AuthUserInfo cacheUserAuth = userAuthCache.getUserAuth(jwtUserInfo.getUsername());
+            if (cacheUserAuth != null && cacheUserAuth.getRoles() != null) {
+                cachedAuthorities = cacheUserAuth.getAuthorities();
             }
 
         }
@@ -65,6 +60,6 @@ public class CacheableUserAuthenticationToken extends AbstractAuthenticationToke
     @Override
     public Object getPrincipal() {
         // 身份信息
-        return userDetails.getUsername();
+        return jwtUserInfo.getUsername();
     }
 }

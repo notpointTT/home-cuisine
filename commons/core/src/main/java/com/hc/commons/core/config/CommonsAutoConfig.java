@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @create 2023-12-10 17:37
  */
 @Configuration
-@ComponentScan("com.hc.common")
-public class CommonAutoConfig {
+@ComponentScan("com.hc.commons")
+public class CommonsAutoConfig {
 
 }

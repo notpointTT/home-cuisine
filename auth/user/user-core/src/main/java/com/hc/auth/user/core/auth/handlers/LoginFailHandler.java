@@ -1,4 +1,4 @@
-package com.hc.commons.security.beans.handlers;
+package com.hc.auth.user.core.auth.handlers;
 
 import com.alibaba.fastjson.JSON;
 import com.hc.commons.dto.response.ApiResult;

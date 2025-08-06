@@ -28,7 +28,7 @@ public class AuthUserInfo implements UserDetails {
     }
 
     @Override
-    public List<? extends GrantedAuthority> getAuthorities() {
+    public List<GrantedAuthority> getAuthorities() {
         if (roles != null) {
             return roles.stream()
                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role))

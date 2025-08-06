@@ -10,9 +10,21 @@ public final class CommonConstant {
     public static final String YES = "1";
     public static final String NO = "0";
 
-    public static final String TOKEN_HEADER_NAME = "Authority";
+
 
     public static final int SMS_CODE_LENGTH = 6;
+
+    public static final class Headers {
+        public static final String TOKEN_HEADER = "Authority";
+        public static final String X_USER_ID_HEADER = "X_User_Id";
+        public static final String X_USER_ROLES_HEADER = "X-User-Roles";
+        public static final String X_REQUEST_FROM_HEADER = "X_Request_From";
+
+
+
+        public static final String X_REQUEST_FROM_GATEWAY = "GATEWAY";
+        public static final String X_REQUEST_FROM_FEIGN = "FEIGN";
+    }
 
     public static final class TokenConstant {
 

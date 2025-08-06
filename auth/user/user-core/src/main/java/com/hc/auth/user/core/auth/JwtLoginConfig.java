@@ -1,8 +1,8 @@
 package com.hc.auth.user.core.auth;
 
 import com.hc.commons.security.AbstractJwtLoginConfig;
-import com.hc.commons.security.beans.handlers.LoginFailHandler;
-import com.hc.commons.security.beans.handlers.LoginSuccessHandler;
+import com.hc.auth.user.core.auth.handlers.LoginFailHandler;
+import com.hc.auth.user.core.auth.handlers.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

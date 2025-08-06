@@ -1,6 +1,7 @@
-package com.hc.commons.security.beans.handlers;
+package com.hc.auth.user.core.auth.handlers;
 
 import com.alibaba.fastjson.JSON;
+import com.hc.commons.dto.auth.AccessTokenUser;
 import com.hc.commons.dto.response.ApiResult;
 import com.hc.commons.security.model.AuthUserInfo;
 import com.hc.commons.security.UserAuthCache;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -45,12 +47,16 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 生成 token 返回前端
         AuthUserInfo details = (AuthUserInfo) authentication.getDetails();
         String username = details.getUsername();
+        List<String> roles = details.getRoles();
+        AccessTokenUser accessTokenUser = new AccessTokenUser();
+        accessTokenUser.setUsername(username);
+        accessTokenUser.setRoles(roles);
 
-        String accessToken = jwtUtil.createToken(username, ACCESS_TOKEN_TIME_OUT_SECOND);
-        String refreshToken = jwtUtil.createToken(username, REFRESH_TOKEN_TIME_OUT_SECOND);
 
-        // 设置 UserAuth 也就是当前登录人信息
-        userAuthCache.setUserAuth(username, details);
+        String jsonUser = JSON.toJSONString(accessTokenUser);
+        String accessToken = jwtUtil.createToken(jsonUser, ACCESS_TOKEN_TIME_OUT_SECOND);
+        String refreshToken = jwtUtil.createToken(jsonUser, REFRESH_TOKEN_TIME_OUT_SECOND);
+
 
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("accessToken", accessToken);

@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-@Component
-@ConditionalOnBean(SmsSender.class)
 public class VerificationCodeHandler {
 
     /**

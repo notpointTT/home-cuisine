@@ -1,5 +1,8 @@
 package com.hc.commons.security.beans;
 
+import com.alibaba.fastjson.JSON;
+import com.hc.commons.dto.auth.AccessTokenUser;
+import com.hc.commons.dto.constant.CommonConstant;
 import com.hc.commons.security.beans.token.CacheableUserAuthenticationToken;
 import com.hc.commons.security.model.AuthUserInfo;
 import com.hc.commons.security.UserAuthCache;
@@ -37,21 +40,41 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        // 1. 从请求头提取Token
-        String token = getToken(request);
+        // 校验是否是 网关来的请求
+        String requestFrom = request.getHeader(CommonConstant.Headers.X_REQUEST_FROM_HEADER);
+        if (CommonConstant.Headers.X_REQUEST_FROM_GATEWAY.equals(requestFrom)
+                || CommonConstant.Headers.X_REQUEST_FROM_FEIGN.equals(requestFrom)) {
+            // 请求时网关或者Feign接口调用
+            // 直接读取 Header 中携带的 用户信息，不再解析 JWT
+            String username = request.getHeader(CommonConstant.Headers.X_USER_ID_HEADER);
+            String userRolesJson = request.getHeader(CommonConstant.Headers.X_USER_ROLES_HEADER);
 
-        if (token != null && jwtUtil.validateToken(token)) {
-            // 2. 构建认证对象
-            Authentication auth = buildAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            if (!StringUtils.isEmpty(username)) {
+                AuthUserInfo authUserInfo = new AuthUserInfo();
+                authUserInfo.setUsername(username);
+                authUserInfo.setRoles(JSON.parseArray(userRolesJson, String.class));
+
+                Authentication auth = new CacheableUserAuthenticationToken(authUserInfo, userAuthCache);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+
+        } else {
+            // 从请求头提取Token
+            String token = getToken(request);
+
+            if (token != null && jwtUtil.validateToken(token)) {
+                // 构建认证对象
+                Authentication auth = buildAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
         }
 
-        // 3. 继续过滤器链
+        // 继续过滤器链
         chain.doFilter(request, response);
     }
 
     private String getToken(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
+        String header = request.getHeader(CommonConstant.Headers.TOKEN_HEADER);
         if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             return header.substring(7);
         }
@@ -66,20 +89,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     public Authentication buildAuthentication(String token) {
 
         // 从JWT自定义声明中直接读取权限（推荐无状态方案）
-        UserDetails userDetails = getTokenUser(token);
+        AuthUserInfo authUserInfo = getTokenUser(token);
 
-        return new CacheableUserAuthenticationToken(userDetails, userAuthCache);
+        return new CacheableUserAuthenticationToken(authUserInfo, userAuthCache);
     }
 
     /**
      * 从缓存中获取用户权限信息
      */
-    private UserDetails getTokenUser(String token) {
-        String username = jwtUtil.parseToken(token);
+    private AuthUserInfo getTokenUser(String token) {
+        String jsonUser = jwtUtil.parseToken(token);
+        AccessTokenUser accessTokenUser = JSON.parseObject(jsonUser, AccessTokenUser.class);
+
         // 直接返回简单 AuthUserInfo
         AuthUserInfo authUserInfo = new AuthUserInfo();
-        authUserInfo.setUsername(username);
-        authUserInfo.setRoles(Collections.emptyList());
+        authUserInfo.setUsername(accessTokenUser.getUsername());
+        authUserInfo.setRoles(accessTokenUser.getRoles());
 
         return authUserInfo;
     }

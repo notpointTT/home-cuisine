@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Component
-@ConditionalOnBean(SmsConfig.class)
+
 public class SmsSender {
 
     @Autowired
