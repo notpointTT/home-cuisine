@@ -1,6 +1,6 @@
 package com.hc.auth.user.core.auth;
 
-import com.hc.commons.security.AbstractJwtLoginConfig;
+import com.hc.commons.security.AbstractCustomAuthConfig;
 import com.hc.auth.user.core.auth.handlers.LoginFailHandler;
 import com.hc.auth.user.core.auth.handlers.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * Jwt 认证配置
  */
 @Configuration
-public class JwtLoginConfig extends AbstractJwtLoginConfig {
+public class JwtLoginConfig implements AbstractCustomAuthConfig {
 
     @Autowired
     private LoginSuccessHandler successHandler;

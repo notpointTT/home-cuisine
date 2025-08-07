@@ -3,6 +3,7 @@ package com.hc.commons.security;
 import com.hc.commons.security.beans.JwtAuthFilter;
 import com.hc.commons.security.beans.handlers.CustomAccessDeniedHandler;
 import com.hc.commons.security.beans.handlers.NeedLoginHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,6 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
+@Slf4j
 @Configuration
 @EnableWebSecurity
 // 启用方法级别安全控制
@@ -27,15 +31,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired(required = false)
-    private AbstractJwtLoginConfig loginConfig;
+    private List<AbstractCustomAuthConfig> customAuthConfigs;
 
-    @Autowired
-    private JwtAuthFilter authFilter;
 
-    @Autowired
-    private NeedLoginHandler needLoginHandler;
-    @Autowired
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
 //    @Autowired
 //    private RoleAccessDecisionVoter roleAccessDecisionVoter;
 
@@ -46,34 +44,16 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        super.configure(http);
-        http
-                .csrf()
-                .disable()
-                // 禁用表单登录
-                .formLogin().disable()
-                // 不会写入Cookie JSESSIONID
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                // 过滤登录等需要放开的请求
-                .antMatchers("/auth/**", "/open/**").permitAll()
-                .antMatchers("/info/base/admin2").hasRole("ADMIN")
-                // 其余请求需要登录
-                .anyRequest().authenticated()
-                .and()
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                //定义异常处理器
-                .exceptionHandling()
-                // 未登录处理
-                .authenticationEntryPoint(needLoginHandler)
-                // 无权限处理
-                .accessDeniedHandler(customAccessDeniedHandler);
 
         // 应用登录配置
-        if (loginConfig != null) {
-            http.apply(loginConfig);
+        if (customAuthConfigs != null && !customAuthConfigs.isEmpty()) {
+           for (AbstractCustomAuthConfig customAuthConfig: customAuthConfigs) {
+               try {
+                   customAuthConfig.configure(http);
+               }catch (Exception e) {
+                   log.error("自定义权限配置应用异常", e);
+               }
+           }
         }
     }
 
