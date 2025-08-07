@@ -13,12 +13,10 @@ import java.util.Map;
  * @description
  * @create 2025-08-07 17:44
  */
-@FeignClient
+@FeignClient("hc-user")
 public interface UserFeignClient {
-    @GetMapping("/base/admin")
+    @GetMapping("/user/info/base/admin")
     ApiResult<?> baseAdminInfo();
-    @GetMapping("/base/user")
+    @GetMapping("/user/info/base/user")
     ApiResult<?> baseUserInfo();
-    @GetMapping("/base")
-    ApiResult<?> baseInfo();
 }
