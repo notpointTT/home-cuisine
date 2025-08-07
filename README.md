@@ -28,10 +28,9 @@
 graph TD
     A[网关:Spring Cloud Gateway] --> B[认证中心]
     A --> C[业务服务集群]
-    B --> D[Redis缓存]
-    C --> E[MySQL集群]
+    B --> D[JWT发签]
+    C --> E[MySQL]
     C --> F[消息队列]
-    F -->|异步处理| G[ElasticSearch]
 ```
 
 ## 二、微服务架构
@@ -59,9 +58,9 @@ home-cuisine（聚合POM）
 │   ├── merchant      # 商家后台
 │   └── delivery      # 配送服务（预留）
 └── external/         # 第三方对接
-├── wechat        # 微信
-├── alipay        # 支付宝
-└── sms           # 短信服务
+    ├── wechat        # 微信
+    ├── alipay        # 支付宝
+    └── sms           # 短信服务
 
 ```
 ### 关键数据流
@@ -71,8 +70,8 @@ sequenceDiagram
     网关->>+认证服务: 校验凭证
     认证服务-->>-网关: JWT令牌
     用户->>+网关: 提交订单(带Token)
-    网关->>网关: 解析Token
     网关->>网关: 校验限流
+    网关->>网关: 解析Token(验签)
     网关->>-订单服务: 提交订单(带X-User-Id)
     订单服务->>+支付服务: 创建支付(分布式事务)
     支付服务->>+支付宝: 调用接口
@@ -98,9 +97,9 @@ sequenceDiagram
 
 ## 三、环境要求
 ### 3.1 强制依赖
-- JDK 1.8+（推荐Zulu发行版）
-- MySQL 5.7+（需开启binlog）
-- Redis 3.2+（集群模式建议6.0+）
+- JDK 1.8+
+- MySQL 5.7+
+- Redis 3.2+
 
 ### 3.2 可选组件
 - 消息队列：RabbitMQ/Kafka（业务量>1万TPS时建议Kafka）
@@ -119,7 +118,6 @@ graph LR
     C --> E[菜品服务]
     C --> F[订单服务]
     C --> G[支付服务]
-    D --> H[Redis]
     E & F & G --> I[MySQL]
     G --> J[Pay]
     F --> K[RabbitMQ]
