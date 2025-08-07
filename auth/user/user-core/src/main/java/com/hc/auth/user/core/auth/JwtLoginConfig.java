@@ -38,14 +38,13 @@ public class JwtLoginConfig implements AbstractCustomAuthConfig {
     @Override
     public void configure(HttpSecurity http) {
         JwtLoginFilter filter = new JwtLoginFilter();
-        // authenticationManager 中已经预设 hc系统内的 provider
+        // authenticationManager 中已经预设 系统内的 provider
         filter.setAuthenticationManager(jwtProviderManager);
         //认证成功处理器
         filter.setAuthenticationSuccessHandler(successHandler);
         //认证失败处理器
         filter.setAuthenticationFailureHandler(failHandler);
 
-//        http.authenticationProvider(smsAuthProvider);
         //将这个过滤器添加到UsernamePasswordAuthenticationFilter之前执行
         http.addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class);
     }

@@ -33,10 +33,6 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired(required = false)
     private List<AbstractCustomAuthConfig> customAuthConfigs;
 
-
-//    @Autowired
-//    private RoleAccessDecisionVoter roleAccessDecisionVoter;
-
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
@@ -45,15 +41,16 @@ public class JwtAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        // 应用登录配置
+        // 此部分面向扩展，加载Spring容器中已实例化的配置对象
         if (customAuthConfigs != null && !customAuthConfigs.isEmpty()) {
-           for (AbstractCustomAuthConfig customAuthConfig: customAuthConfigs) {
-               try {
-                   customAuthConfig.configure(http);
-               }catch (Exception e) {
-                   log.error("自定义权限配置应用异常", e);
-               }
-           }
+            for (AbstractCustomAuthConfig customAuthConfig: customAuthConfigs) {
+                try {
+                    // 应用扩展配置
+                    customAuthConfig.configure(http);
+                }catch (Exception e) {
+                    log.error("自定义权限配置应用异常", e);
+                }
+            }
         }
     }
 

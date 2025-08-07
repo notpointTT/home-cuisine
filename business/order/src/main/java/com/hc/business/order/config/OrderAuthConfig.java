@@ -15,7 +15,7 @@ public class OrderAuthConfig implements AbstractCustomAuthConfig {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                // 过滤登录等需要放开的请求
+                // 需要放开的请求
                 .antMatchers("/openx/**").permitAll();
     }
 }
