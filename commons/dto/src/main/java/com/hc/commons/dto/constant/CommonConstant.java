@@ -16,11 +16,18 @@ public final class CommonConstant {
 
     public static final class Headers {
         public static final String TOKEN_HEADER = "Authorization";
-        public static final String X_USER_ID_HEADER = "X_User_Id";
+        public static final String X_USER_ID_HEADER = "X-User-Id";
         public static final String X_USER_ROLES_HEADER = "X-User-Roles";
-        public static final String X_REQUEST_FROM_HEADER = "X_Request_From";
+        public static final String X_REQUEST_FROM_HEADER = "X-Request-From";
 
-
+        /**
+         * 全局链路ID
+         */
+        public static final String X_G_TRACE_ID_HEADER = "X-G-Trace-ID";
+        /**
+         * 当前链路ID
+         */
+        public static final String X_TRACE_ID_HEADER = "X-Trace-ID";
 
         public static final String X_REQUEST_FROM_GATEWAY = "GATEWAY";
         public static final String X_REQUEST_FROM_FEIGN = "FEIGN";
