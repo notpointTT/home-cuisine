@@ -1,4 +1,4 @@
-package com.hc.commons.security.feign;
+package com.hc.commons.core.feign;
 
 import com.alibaba.nacos.common.utils.UuidUtils;
 import com.hc.commons.dto.constant.CommonConstant;
@@ -14,8 +14,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @description
  * @create 2025-08-07 17:31
  */
-@Component
-public class FeignHeaderSetInterceptor implements RequestInterceptor {
+public class FeignRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         ServletRequestAttributes attributes = (ServletRequestAttributes)

@@ -1,8 +1,8 @@
-package com.hc.commons.security.filter;
+package com.hc.commons.core.filter;
 
 import com.alibaba.nacos.common.utils.UuidUtils;
+import com.hc.commons.core.model.HeaderModifiableRequestWrapper;
 import com.hc.commons.dto.constant.CommonConstant;
-import com.hc.commons.security.model.HeaderModifiableRequestWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,7 +18,6 @@ import java.io.IOException;
  * @description 链路编号设置
  * @create 2025-08-08 10:57
  */
-@Component
 public class TraceFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

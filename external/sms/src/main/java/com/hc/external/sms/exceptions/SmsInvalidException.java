@@ -7,7 +7,7 @@ import com.hc.commons.dto.emums.ApiResultCode;
 public class SmsInvalidException extends BaseException {
 
     public SmsInvalidException() {
-        super(ApiResultCode.SMS_INVALID);
+        super("验证码无效");
     }
 
 }

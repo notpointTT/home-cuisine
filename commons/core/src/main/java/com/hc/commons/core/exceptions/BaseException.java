@@ -10,9 +10,9 @@ import javax.validation.constraints.NotNull;
  * @description
  * @create 2023-12-29 10:50
  */
-public class BaseException extends RuntimeException{
+public class BaseException extends RuntimeException {
 
-    private ApiResultCode code = ApiResultCode.ERROR;
+    private int responseStatus = 500;
 
     public BaseException() {
     }
@@ -21,9 +21,9 @@ public class BaseException extends RuntimeException{
         super(message);
     }
 
-    public BaseException(ApiResultCode code) {
-        super(code.getMsg());
-        this.code = code;
+    public BaseException(String message, int responseStatus) {
+        super(message);
+        this.responseStatus = responseStatus;
     }
 
     public BaseException(String message, Throwable cause) {
@@ -34,14 +34,11 @@ public class BaseException extends RuntimeException{
         super(cause);
     }
 
-    public ApiResultCode getCode() {
-        return code;
+    public int getResponseStatus() {
+        return responseStatus;
     }
 
-    public void setCode(@NotNull ApiResultCode code) {
-        if (code == null) {
-            throw new RuntimeException("code is not null");
-        }
-        this.code = code;
+    public void setResponseStatus(int responseStatus) {
+        this.responseStatus = responseStatus;
     }
 }

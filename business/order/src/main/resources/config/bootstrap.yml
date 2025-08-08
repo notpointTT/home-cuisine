@@ -2,6 +2,10 @@ server:
   port: 8083
   servlet:
     context-path: /order
+  tomcat:
+    max-connections: 10000
+    max-threads: 1000
+
 
 spring:
   application:

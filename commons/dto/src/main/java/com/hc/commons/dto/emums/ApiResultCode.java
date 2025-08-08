@@ -6,7 +6,7 @@ import com.hc.commons.dto.constant.CommonConstant;
 /**
  * @author a1234
  */
-
+@Deprecated
 public enum ApiResultCode {
     /**
      * 通用成功

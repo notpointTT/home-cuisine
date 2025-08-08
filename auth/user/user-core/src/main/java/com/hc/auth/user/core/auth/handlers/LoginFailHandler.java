@@ -28,6 +28,6 @@ public class LoginFailHandler implements AuthenticationFailureHandler {
         AuthException e = (AuthException) exception;
 
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        response.getWriter().write(JSON.toJSONString(ApiResult.result(e.getResultCode(), null)));
+        response.getWriter().write(JSON.toJSONString(ApiResult.error(e.getMessage())));
     }
 }

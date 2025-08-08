@@ -22,7 +22,6 @@ public class TraceFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
-        HttpHeaders headers = exchange.getRequest().getHeaders();
         String gTraceId = getHeader(exchange.getRequest(), CommonConstant.Headers.X_G_TRACE_ID_HEADER);
         if (StringUtils.isEmpty(gTraceId)) {
             gTraceId = UuidUtils.generateUuid();
@@ -30,6 +29,7 @@ public class TraceFilter implements GlobalFilter {
 
         exchange.getRequest().mutate()
                 .header(CommonConstant.Headers.X_G_TRACE_ID_HEADER, gTraceId)
+                .header(CommonConstant.Headers.X_REQUEST_FROM_HEADER, CommonConstant.Headers.X_REQUEST_FROM_GATEWAY)
                 .build();
 
         return chain.filter(exchange);

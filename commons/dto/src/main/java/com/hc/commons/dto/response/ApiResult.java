@@ -24,15 +24,6 @@ public class ApiResult<T> {
         return result;
     }
 
-    public static <T> ApiResult<?> result(ApiResultCode resultCode, T data) {
-        ApiResult<Object> result = new ApiResult<>();
-        result.code = resultCode.getCode();
-        result.msg = resultCode.getMsg();
-        result.data = data;
-
-        return result;
-    }
-
     public static ApiResult<?> success() {
         ApiResult<Object> result = new ApiResult<>();
         result.code = CommonConstant.YES;

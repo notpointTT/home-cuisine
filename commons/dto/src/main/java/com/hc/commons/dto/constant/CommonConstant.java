@@ -29,6 +29,9 @@ public final class CommonConstant {
          */
         public static final String X_TRACE_ID_HEADER = "X-Trace-ID";
 
+
+        public static final String X_EXCEPTION = "X-Exception";
+
         public static final String X_REQUEST_FROM_GATEWAY = "GATEWAY";
         public static final String X_REQUEST_FROM_FEIGN = "FEIGN";
     }

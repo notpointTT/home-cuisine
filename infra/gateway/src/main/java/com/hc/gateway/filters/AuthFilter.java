@@ -36,7 +36,6 @@ public class AuthFilter implements GlobalFilter {
             exchange.getRequest().mutate()
                     .header(CommonConstant.Headers.X_USER_ID_HEADER, accessTokenUser.getUsername())
                     .header(CommonConstant.Headers.X_USER_ROLES_HEADER, JSON.toJSONString(accessTokenUser.getRoles()))
-                    .header(CommonConstant.Headers.X_REQUEST_FROM_HEADER, CommonConstant.Headers.X_REQUEST_FROM_GATEWAY)
                     .build();
         }
 

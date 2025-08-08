@@ -1,4 +1,4 @@
-package com.hc.commons.security.model;
+package com.hc.commons.core.model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;

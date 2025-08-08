@@ -11,7 +11,10 @@ import org.springframework.context.annotation.Import;
  * @create 2023-12-10 17:37
  */
 @Configuration
-@Import(FeignConfig.class)
+@Import({
+        FeignConfig.class,
+        WebFiltersConfig.class
+})
 @ComponentScan("com.hc.commons")
 public class CommonsAutoConfig {
 
